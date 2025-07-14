@@ -67,24 +67,338 @@
   --horizon-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* Скрытие оригинальных элементов 1C */
-.v8-main-frame:not(.horizon-transformed),
-.SystemCommandBar:not(.horizon-transformed),
-#SystemCommandBar:not(.horizon-transformed),
-.v8-dynamic-list-table:not(.horizon-transformed),
-.v8-dynamic-form:not(.horizon-transformed) {
-  display: none !important;
-}
+/* Загрузка шрифта Inter */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
 /* Глобальные стили для трансформированного интерфейса */
+html.horizon-ui,
 body.horizon-ui {
-  margin: 0;
-  padding: 0;
-  font-family: var(--horizon-font-family);
-  font-size: var(--horizon-font-size-md);
-  line-height: 1.5;
-  color: var(--horizon-gray-800);
-  background: var(--horizon-gray-50);
+  font-family: var(--horizon-font-family) !important;
+  font-size: var(--horizon-font-size-md) !important;
+  line-height: 1.5 !important;
+  color: var(--horizon-gray-800) !important;
+  background: var(--horizon-gray-50) !important;
+}
+
+/* Основные элементы 1C */
+.horizon-ui .v8-main-frame,
+.horizon-ui .v8-main-container,
+.horizon-ui .v8-dynamic-form,
+.horizon-ui .v8-dynamic-list,
+.horizon-ui .v8-form-container {
+  background: var(--horizon-gray-50) !important;
+  font-family: var(--horizon-font-family) !important;
+}
+
+/* Командная панель 1C */
+.horizon-ui .SystemCommandBar,
+.horizon-ui #SystemCommandBar,
+.horizon-ui .v8-command-bar,
+.horizon-ui .v8-toolbar {
+  background: white !important;
+  border: none !important;
+  border-bottom: 1px solid var(--horizon-gray-200) !important;
+  box-shadow: var(--horizon-shadow-sm) !important;
+  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
+  border-radius: 0 !important;
+}
+
+/* Кнопки 1C */
+.horizon-ui button,
+.horizon-ui input[type="button"],
+.horizon-ui input[type="submit"],
+.horizon-ui .v8-button,
+.horizon-ui .v8-command-button,
+.horizon-ui .SystemCommandBar button,
+.horizon-ui #SystemCommandBar button {
+  background: var(--horizon-brand-500) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  padding: var(--horizon-space-3) var(--horizon-space-6) !important;
+  font-size: var(--horizon-font-size-sm) !important;
+  font-weight: 500 !important;
+  font-family: var(--horizon-font-family) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  min-height: 2.5rem !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-decoration: none !important;
+  box-shadow: var(--horizon-shadow-sm) !important;
+}
+
+.horizon-ui button:hover,
+.horizon-ui input[type="button"]:hover,
+.horizon-ui input[type="submit"]:hover,
+.horizon-ui .v8-button:hover,
+.horizon-ui .v8-command-button:hover {
+  background: var(--horizon-brand-600) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--horizon-shadow-md) !important;
+}
+
+/* Вторичные кнопки */
+.horizon-ui button.secondary,
+.horizon-ui .v8-button.secondary,
+.horizon-ui button[title*="Отмена"],
+.horizon-ui button[title*="Закрыть"] {
+  background: var(--horizon-gray-100) !important;
+  color: var(--horizon-gray-700) !important;
+}
+
+.horizon-ui button.secondary:hover,
+.horizon-ui .v8-button.secondary:hover,
+.horizon-ui button[title*="Отмена"]:hover,
+.horizon-ui button[title*="Закрыть"]:hover {
+  background: var(--horizon-gray-200) !important;
+}
+
+/* Поля ввода 1C */
+.horizon-ui input[type="text"],
+.horizon-ui input[type="password"],
+.horizon-ui input[type="email"],
+.horizon-ui input[type="number"],
+.horizon-ui input[type="date"],
+.horizon-ui input[type="time"],
+.horizon-ui textarea,
+.horizon-ui select,
+.horizon-ui .v8-input,
+.horizon-ui .v8-text-input,
+.horizon-ui .v8-number-input,
+.horizon-ui .v8-date-input {
+  background: white !important;
+  border: 1px solid var(--horizon-gray-200) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
+  font-size: var(--horizon-font-size-sm) !important;
+  font-family: var(--horizon-font-family) !important;
+  color: var(--horizon-gray-800) !important;
+  transition: all 0.2s ease !important;
+  min-height: 2.5rem !important;
+  box-shadow: var(--horizon-shadow-sm) !important;
+}
+
+.horizon-ui input[type="text"]:focus,
+.horizon-ui input[type="password"]:focus,
+.horizon-ui input[type="email"]:focus,
+.horizon-ui input[type="number"]:focus,
+.horizon-ui input[type="date"]:focus,
+.horizon-ui input[type="time"]:focus,
+.horizon-ui textarea:focus,
+.horizon-ui select:focus,
+.horizon-ui .v8-input:focus,
+.horizon-ui .v8-text-input:focus,
+.horizon-ui .v8-number-input:focus,
+.horizon-ui .v8-date-input:focus {
+  outline: none !important;
+  border-color: var(--horizon-brand-500) !important;
+  box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.1) !important;
+}
+
+/* Таблицы 1C */
+.horizon-ui table,
+.horizon-ui .v8-dynamic-list-table,
+.horizon-ui .v8-table,
+.horizon-ui .v8-grid {
+  background: white !important;
+  border-radius: var(--horizon-radius-xl) !important;
+  box-shadow: var(--horizon-shadow-md) !important;
+  overflow: hidden !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+  width: 100% !important;
+  margin-bottom: var(--horizon-space-6) !important;
+}
+
+.horizon-ui table th,
+.horizon-ui .v8-dynamic-list-table th,
+.horizon-ui .v8-table th,
+.horizon-ui .v8-grid th,
+.horizon-ui .v8-table-header {
+  background: var(--horizon-gray-50) !important;
+  padding: var(--horizon-space-4) !important;
+  text-align: left !important;
+  font-weight: 600 !important;
+  font-size: var(--horizon-font-size-sm) !important;
+  color: var(--horizon-gray-700) !important;
+  border-bottom: 1px solid var(--horizon-gray-200) !important;
+  font-family: var(--horizon-font-family) !important;
+}
+
+.horizon-ui table td,
+.horizon-ui .v8-dynamic-list-table td,
+.horizon-ui .v8-table td,
+.horizon-ui .v8-grid td,
+.horizon-ui .v8-table-cell {
+  padding: var(--horizon-space-4) !important;
+  border-bottom: 1px solid var(--horizon-gray-100) !important;
+  font-size: var(--horizon-font-size-sm) !important;
+  color: var(--horizon-gray-800) !important;
+  font-family: var(--horizon-font-family) !important;
+}
+
+.horizon-ui table tbody tr:hover,
+.horizon-ui .v8-dynamic-list-table tbody tr:hover,
+.horizon-ui .v8-table tbody tr:hover,
+.horizon-ui .v8-grid tbody tr:hover {
+  background: var(--horizon-gray-50) !important;
+}
+
+.horizon-ui table tbody tr:last-child td,
+.horizon-ui .v8-dynamic-list-table tbody tr:last-child td,
+.horizon-ui .v8-table tbody tr:last-child td,
+.horizon-ui .v8-grid tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Формы 1C */
+.horizon-ui .v8-dynamic-form,
+.horizon-ui .v8-form,
+.horizon-ui .v8-form-container,
+.horizon-ui form {
+  background: white !important;
+  border-radius: var(--horizon-radius-xl) !important;
+  box-shadow: var(--horizon-shadow-md) !important;
+  padding: var(--horizon-space-6) !important;
+  margin-bottom: var(--horizon-space-6) !important;
+}
+
+/* Панели и контейнеры */
+.horizon-ui .v8-panel,
+.horizon-ui .v8-container,
+.horizon-ui .v8-group-box,
+.horizon-ui .v8-tab-panel {
+  background: white !important;
+  border: 1px solid var(--horizon-gray-200) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  box-shadow: var(--horizon-shadow-sm) !important;
+  margin-bottom: var(--horizon-space-4) !important;
+}
+
+/* Вкладки 1C */
+.horizon-ui .v8-tab,
+.horizon-ui .v8-tab-button {
+  background: var(--horizon-gray-100) !important;
+  border: 1px solid var(--horizon-gray-200) !important;
+  border-radius: var(--horizon-radius-lg) var(--horizon-radius-lg) 0 0 !important;
+  padding: var(--horizon-space-3) var(--horizon-space-6) !important;
+  font-family: var(--horizon-font-family) !important;
+  font-weight: 500 !important;
+  color: var(--horizon-gray-700) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.horizon-ui .v8-tab.active,
+.horizon-ui .v8-tab-button.active,
+.horizon-ui .v8-tab:hover,
+.horizon-ui .v8-tab-button:hover {
+  background: white !important;
+  color: var(--horizon-brand-600) !important;
+  border-bottom-color: white !important;
+}
+
+/* Меню и выпадающие списки */
+.horizon-ui .v8-menu,
+.horizon-ui .v8-dropdown,
+.horizon-ui .v8-context-menu {
+  background: white !important;
+  border: 1px solid var(--horizon-gray-200) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  box-shadow: var(--horizon-shadow-lg) !important;
+  padding: var(--horizon-space-2) 0 !important;
+}
+
+.horizon-ui .v8-menu-item,
+.horizon-ui .v8-dropdown-item {
+  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
+  font-family: var(--horizon-font-family) !important;
+  font-size: var(--horizon-font-size-sm) !important;
+  color: var(--horizon-gray-700) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.horizon-ui .v8-menu-item:hover,
+.horizon-ui .v8-dropdown-item:hover {
+  background: var(--horizon-gray-50) !important;
+  color: var(--horizon-brand-600) !important;
+}
+
+/* Чекбоксы и радиокнопки */
+.horizon-ui input[type="checkbox"],
+.horizon-ui input[type="radio"],
+.horizon-ui .v8-checkbox,
+.horizon-ui .v8-radio {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  border: 2px solid var(--horizon-gray-300) !important;
+  border-radius: var(--horizon-radius-sm) !important;
+  background: white !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.horizon-ui input[type="radio"],
+.horizon-ui .v8-radio {
+  border-radius: 50% !important;
+}
+
+.horizon-ui input[type="checkbox"]:checked,
+.horizon-ui input[type="radio"]:checked,
+.horizon-ui .v8-checkbox:checked,
+.horizon-ui .v8-radio:checked {
+  background: var(--horizon-brand-500) !important;
+  border-color: var(--horizon-brand-500) !important;
+}
+
+/* Прогресс-бары и индикаторы */
+.horizon-ui .v8-progress,
+.horizon-ui .v8-progress-bar {
+  background: var(--horizon-gray-200) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  height: 0.5rem !important;
+  overflow: hidden !important;
+}
+
+.horizon-ui .v8-progress-fill {
+  background: var(--horizon-brand-500) !important;
+  height: 100% !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  transition: width 0.3s ease !important;
+}
+
+/* Статусные сообщения */
+.horizon-ui .v8-message,
+.horizon-ui .v8-notification {
+  padding: var(--horizon-space-4) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  font-family: var(--horizon-font-family) !important;
+  font-size: var(--horizon-font-size-sm) !important;
+  margin-bottom: var(--horizon-space-4) !important;
+}
+
+.horizon-ui .v8-message.success,
+.horizon-ui .v8-notification.success {
+  background: rgba(72, 187, 120, 0.1) !important;
+  color: var(--horizon-success) !important;
+  border: 1px solid rgba(72, 187, 120, 0.2) !important;
+}
+
+.horizon-ui .v8-message.error,
+.horizon-ui .v8-notification.error {
+  background: rgba(245, 101, 101, 0.1) !important;
+  color: var(--horizon-error) !important;
+  border: 1px solid rgba(245, 101, 101, 0.2) !important;
+}
+
+.horizon-ui .v8-message.warning,
+.horizon-ui .v8-notification.warning {
+  background: rgba(237, 137, 54, 0.1) !important;
+  color: var(--horizon-warning) !important;
+  border: 1px solid rgba(237, 137, 54, 0.2) !important;
 }
 
 /* Анимации */
@@ -98,261 +412,164 @@ body.horizon-ui {
   to { transform: translateX(0); }
 }
 
-.horizon-fade-in {
-  animation: fadeIn 0.3s ease-out;
+.horizon-ui .horizon-fade-in {
+  animation: fadeIn 0.3s ease-out !important;
 }
 
-.horizon-slide-in {
-  animation: slideIn 0.3s ease-out;
+.horizon-ui .horizon-slide-in {
+  animation: slideIn 0.3s ease-out !important;
 }
 
-/* Кастомные компоненты Horizon UI */
-.horizon-card {
-  background: white;
-  border-radius: var(--horizon-radius-xl);
-  box-shadow: var(--horizon-shadow-md);
-  padding: var(--horizon-space-6);
-  margin-bottom: var(--horizon-space-6);
+/* Отключение анимаций */
+.horizon-ui.horizon-no-animations *,
+.horizon-ui.horizon-no-animations *::before,
+.horizon-ui.horizon-no-animations *::after {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
 }
 
-.horizon-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--horizon-space-3) var(--horizon-space-6);
-  font-size: var(--horizon-font-size-sm);
-  font-weight: 500;
-  border-radius: var(--horizon-radius-lg);
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  text-decoration: none;
-  min-height: 2.5rem;
+/* Компактный режим */
+.horizon-ui.horizon-compact {
+  --horizon-space-1: 0.125rem;
+  --horizon-space-2: 0.25rem;
+  --horizon-space-3: 0.375rem;
+  --horizon-space-4: 0.5rem;
+  --horizon-space-5: 0.625rem;
+  --horizon-space-6: 0.75rem;
+  --horizon-space-8: 1rem;
 }
 
-.horizon-button-primary {
-  background: var(--horizon-brand-500);
-  color: white;
+/* Высокий контраст */
+.horizon-ui.horizon-high-contrast {
+  --horizon-gray-800: #000000;
+  --horizon-gray-700: #1a1a1a;
+  --horizon-gray-600: #333333;
+  --horizon-brand-500: #0000FF;
+  --horizon-brand-600: #0000CC;
 }
 
-.horizon-button-primary:hover {
-  background: var(--horizon-brand-600);
-  transform: translateY(-1px);
-  box-shadow: var(--horizon-shadow-lg);
-}
-
-.horizon-button-secondary {
-  background: var(--horizon-gray-100);
-  color: var(--horizon-gray-700);
-}
-
-.horizon-button-secondary:hover {
-  background: var(--horizon-gray-200);
-}
-
-/* Навигация */
-.horizon-sidebar {
-  width: 275px;
-  background: white;
-  border-right: 1px solid var(--horizon-gray-200);
-  box-shadow: var(--horizon-shadow-sm);
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  position: fixed;
-  z-index: 1000;
-}
-
-.horizon-sidebar-content {
-  flex: 1;
-  overflow-y: auto;
-  padding: var(--horizon-space-4) 0;
-}
-
-.horizon-nav-item {
-  display: flex;
-  align-items: center;
-  padding: var(--horizon-space-3) var(--horizon-space-6);
-  color: var(--horizon-gray-700);
-  text-decoration: none;
-  transition: all 0.2s ease;
-  border-radius: var(--horizon-radius-lg);
-  margin: var(--horizon-space-1) var(--horizon-space-4);
-  font-weight: 500;
-}
-
-.horizon-nav-item:hover {
-  background: var(--horizon-gray-100);
-  color: var(--horizon-gray-900);
-}
-
-.horizon-nav-item.active {
-  background: var(--horizon-brand-50);
-  color: var(--horizon-brand-600);
-  border-left: 3px solid var(--horizon-brand-500);
-}
-
-.horizon-nav-icon {
-  margin-right: var(--horizon-space-3);
-  font-size: var(--horizon-font-size-lg);
-}
-
-/* Главная область контента */
-.horizon-main-layout {
-  margin-left: 275px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.horizon-header {
-  height: 64px;
-  background: white;
-  border-bottom: 1px solid var(--horizon-gray-200);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 var(--horizon-space-6);
-  box-shadow: var(--horizon-shadow-sm);
-  position: sticky;
-  top: 0;
-  z-index: 999;
-}
-
-.horizon-content {
-  flex: 1;
-  padding: var(--horizon-space-6);
-  background: var(--horizon-gray-50);
-}
-
-/* Таблицы */
-.horizon-table-container {
-  background: white;
-  border-radius: var(--horizon-radius-xl);
-  box-shadow: var(--horizon-shadow-md);
-  overflow: hidden;
-  margin-bottom: var(--horizon-space-6);
-}
-
-.horizon-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.horizon-table th {
-  background: var(--horizon-gray-50);
-  padding: var(--horizon-space-4);
-  text-align: left;
-  font-weight: 600;
-  font-size: var(--horizon-font-size-sm);
-  color: var(--horizon-gray-700);
-  border-bottom: 1px solid var(--horizon-gray-200);
-}
-
-.horizon-table td {
-  padding: var(--horizon-space-4);
-  border-bottom: 1px solid var(--horizon-gray-100);
-  font-size: var(--horizon-font-size-sm);
-  color: var(--horizon-gray-800);
-}
-
-.horizon-table tbody tr:hover {
-  background: var(--horizon-gray-50);
-}
-
-.horizon-table tbody tr:last-child td {
-  border-bottom: none;
-}
-
-/* Формы */
-.horizon-form-container {
-  background: white;
-  border-radius: var(--horizon-radius-xl);
-  box-shadow: var(--horizon-shadow-md);
-  padding: var(--horizon-space-6);
-  margin-bottom: var(--horizon-space-6);
-}
-
-.horizon-form-group {
-  margin-bottom: var(--horizon-space-5);
-}
-
-.horizon-form-label {
-  display: block;
-  font-size: var(--horizon-font-size-sm);
-  font-weight: 500;
-  color: var(--horizon-gray-700);
-  margin-bottom: var(--horizon-space-2);
-}
-
-.horizon-form-input {
-  width: 100%;
-  padding: var(--horizon-space-3) var(--horizon-space-4);
-  border: 1px solid var(--horizon-gray-200);
-  border-radius: var(--horizon-radius-lg);
-  font-size: var(--horizon-font-size-sm);
-  transition: all 0.2s ease;
-  background: white;
-}
-
-.horizon-form-input:focus {
-  outline: none;
-  border-color: var(--horizon-brand-500);
-  box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.1);
-}
-
-.horizon-form-input:disabled {
-  background: var(--horizon-gray-50);
-  color: var(--horizon-gray-500);
-  cursor: not-allowed;
-}
-
-.horizon-form-textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.horizon-form-select {
-  appearance: none;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236B7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-  background-position: right 0.5rem center;
-  background-repeat: no-repeat;
-  background-size: 1.5em 1.5em;
-  padding-right: 2.5rem;
+/* Темная тема */
+.horizon-ui[data-theme="dark"] {
+  --horizon-gray-50: #171923;
+  --horizon-gray-100: #1A202C;
+  --horizon-gray-200: #2D3748;
+  --horizon-gray-300: #4A5568;
+  --horizon-gray-400: #718096;
+  --horizon-gray-500: #A0AEC0;
+  --horizon-gray-600: #CBD5E0;
+  --horizon-gray-700: #E2E8F0;
+  --horizon-gray-800: #F7FAFC;
+  --horizon-gray-900: #FFFFFF;
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
-  .horizon-sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.3s ease;
+  .horizon-ui .v8-main-frame,
+  .horizon-ui .v8-dynamic-form,
+  .horizon-ui .v8-table {
+    margin: var(--horizon-space-2) !important;
+    padding: var(--horizon-space-4) !important;
   }
   
-  .horizon-sidebar.open {
-    transform: translateX(0);
-  }
-  
-  .horizon-main-layout {
-    margin-left: 0;
-  }
-  
-  .horizon-content {
-    padding: var(--horizon-space-4);
+  .horizon-ui button,
+  .horizon-ui .v8-button {
+    min-height: 2.75rem !important;
+    font-size: var(--horizon-font-size-md) !important;
   }
 }
 
-/* Темная тема */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --horizon-gray-50: #171923;
-    --horizon-gray-100: #1A202C;
-    --horizon-gray-200: #2D3748;
-    --horizon-gray-300: #4A5568;
-    --horizon-gray-700: #E2E8F0;
-    --horizon-gray-800: #F7FAFC;
-    --horizon-gray-900: #FFFFFF;
-  }
+/* Поиск и подсветка */
+.horizon-ui .horizon-search-highlight {
+  background: rgba(255, 235, 59, 0.3) !important;
+  border-radius: var(--horizon-radius-sm) !important;
+  padding: 0.125rem !important;
 }
 
-/* Загрузка шрифта Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Индикаторы загрузки */
+.horizon-ui .horizon-loader {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 1000 !important;
+}
+
+.horizon-ui .horizon-spinner {
+  width: 2rem !important;
+  height: 2rem !important;
+  border: 2px solid var(--horizon-gray-200) !important;
+  border-top: 2px solid var(--horizon-brand-500) !important;
+  border-radius: 50% !important;
+  animation: spin 1s linear infinite !important;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Фокус */
+.horizon-ui .horizon-focused {
+  outline: 2px solid var(--horizon-brand-500) !important;
+  outline-offset: 2px !important;
+}
+
+/* Скроллбары */
+.horizon-ui ::-webkit-scrollbar {
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.horizon-ui ::-webkit-scrollbar-track {
+  background: var(--horizon-gray-100) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+}
+
+.horizon-ui ::-webkit-scrollbar-thumb {
+  background: var(--horizon-gray-400) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+}
+
+.horizon-ui ::-webkit-scrollbar-thumb:hover {
+  background: var(--horizon-gray-500) !important;
+}
+
+/* Специфичные селекторы для разных версий 1C */
+.horizon-ui .v8ui-ctl,
+.horizon-ui .v8ui-ctl-edit,
+.horizon-ui .v8ui-ctl-button {
+  font-family: var(--horizon-font-family) !important;
+}
+
+.horizon-ui .v8ui-ctl-edit {
+  background: white !important;
+  border: 1px solid var(--horizon-gray-200) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
+}
+
+.horizon-ui .v8ui-ctl-button {
+  background: var(--horizon-brand-500) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  padding: var(--horizon-space-3) var(--horizon-space-6) !important;
+}
+
+/* Исправление z-index для модальных окон */
+.horizon-ui .v8-modal,
+.horizon-ui .v8-dialog,
+.horizon-ui .v8-popup {
+  z-index: 10000 !important;
+  background: white !important;
+  border-radius: var(--horizon-radius-xl) !important;
+  box-shadow: var(--horizon-shadow-xl) !important;
+  border: none !important;
+}
+
+.horizon-ui .v8-modal-overlay,
+.horizon-ui .v8-dialog-overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+  z-index: 9999 !important;
+}
