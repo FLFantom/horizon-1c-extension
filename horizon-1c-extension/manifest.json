@@ -1,13 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Horizon UI for 1C:Enterprise",
-  "version": "1.0.0",
-  "description": "Трансформирует интерфейс 1C под современный дизайн Horizon UI",
+  "version": "2.0.0",
+  "description": "Трансформирует интерфейс 1C под современный дизайн Horizon UI с улучшенной производительностью и функциональностью",
   
   "permissions": [
     "activeTab",
     "storage",
-    "declarativeContent"
+    "declarativeContent",
+    "scripting",
+    "tabs"
   ],
   
   "host_permissions": [
@@ -15,7 +17,10 @@
     "*://localhost:*/*/hs/v8reader/*",
     "*://*/*/hs/v8reader/*",
     "*://clobus.uz/*",
-    "*://*.1cfresh.com/*"
+    "*://*.1cfresh.com/*",
+    "*://*/*/ws/*",
+    "*://*/*/ru_RU/*",
+    "*://*/*/en_US/*"
   ],
   
   "content_scripts": [
@@ -25,12 +30,16 @@
         "*://localhost:*/*/hs/v8reader/*", 
         "*://*/*/hs/v8reader/*",
         "*://clobus.uz/*",
-        "*://*.1cfresh.com/*"
+        "*://*.1cfresh.com/*",
+        "*://*/*/ws/*",
+        "*://*/*/ru_RU/*",
+        "*://*/*/en_US/*"
       ],
       "js": [
-        "libs/react.min.js",
         "libs/horizon-ui.min.js",
         "content/horizon-components.js",
+        "content/horizon-performance.js",
+        "content/horizon-accessibility.js",
         "content/content.js"
       ],
       "css": [
@@ -39,6 +48,10 @@
       "run_at": "document_start"
     }
   ],
+  
+  "background": {
+    "service_worker": "background/background.js"
+  },
   
   "action": {
     "default_popup": "popup/popup.html",
@@ -60,9 +73,12 @@
     {
       "resources": [
         "content/horizon-styles.css",
-        "libs/horizon-ui.min.js"
+        "libs/horizon-ui.min.js",
+        "assets/*"
       ],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  
+  "options_page": "options/options.html"
 }

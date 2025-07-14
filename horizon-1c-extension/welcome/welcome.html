@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Добро пожаловать в Horizon UI</title>
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+  <div class="welcome-container">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="hero-content">
+        <div class="hero-logo">
+          <div class="logo-icon">1C</div>
+          <div class="logo-glow"></div>
+        </div>
+        <h1 class="hero-title">Добро пожаловать в Horizon UI</h1>
+        <p class="hero-subtitle">Современный интерфейс для 1C:Предприятие</p>
+        <div class="hero-version">Версия 2.0.0</div>
+      </div>
+      <div class="hero-decoration">
+        <div class="decoration-circle circle-1"></div>
+        <div class="decoration-circle circle-2"></div>
+        <div class="decoration-circle circle-3"></div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="container">
+        <h2 class="section-title">Что нового в Horizon UI 2.0</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🎨</div>
+            <h3 class="feature-title">Современный дизайн</h3>
+            <p class="feature-description">Полностью переработанный интерфейс в стиле Horizon UI с улучшенной типографикой и цветовой схемой</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3 class="feature-title">Адаптивность</h3>
+            <p class="feature-description">Оптимизированный интерфейс для всех устройств - от мобильных телефонов до больших мониторов</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title">Производительность</h3>
+            <p class="feature-description">Улучшенная производительность с интеллектуальной оптимизацией и настраиваемыми режимами работы</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">♿</div>
+            <h3 class="feature-title">Доступность</h3>
+            <p class="feature-description">Полная поддержка стандартов доступности с настройками для пользователей с особыми потребностями</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🔧</div>
+            <h3 class="feature-title">Настройки</h3>
+            <p class="feature-description">Гибкая система настроек с возможностью персонализации каждого аспекта интерфейса</p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3 class="feature-title">Новые возможности</h3>
+            <p class="feature-description">Улучшенная навигация, поиск, фильтрация и множество других полезных функций</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Setup Section -->
+    <section class="setup-section">
+      <div class="container">
+        <h2 class="section-title">Быстрая настройка</h2>
+        <div class="setup-steps">
+          <div class="setup-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h3 class="step-title">Выберите тему</h3>
+              <p class="step-description">Настройте внешний вид под свои предпочтения</p>
+              <div class="theme-selector">
+                <button class="theme-option active" data-theme="light">
+                  <div class="theme-preview light-theme"></div>
+                  <span>Светлая</span>
+                </button>
+                <button class="theme-option" data-theme="dark">
+                  <div class="theme-preview dark-theme"></div>
+                  <span>Темная</span>
+                </button>
+                <button class="theme-option" data-theme="auto">
+                  <div class="theme-preview auto-theme"></div>
+                  <span>Авто</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="setup-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h3 class="step-title">Выберите акцентный цвет</h3>
+              <p class="step-description">Персонализируйте цветовую схему</p>
+              <div class="color-selector">
+                <button class="color-option active" data-color="#4318FF" style="background: #4318FF"></button>
+                <button class="color-option" data-color="#7551FF" style="background: #7551FF"></button>
+                <button class="color-option" data-color="#48BB78" style="background: #48BB78"></button>
+                <button class="color-option" data-color="#ED8936" style="background: #ED8936"></button>
+                <button class="color-option" data-color="#F56565" style="background: #F56565"></button>
+                <button class="color-option" data-color="#4299E1" style="background: #4299E1"></button>
+              </div>
+            </div>
+          </div>
+
+          <div class="setup-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h3 class="step-title">Настройте производительность</h3>
+              <p class="step-description">Выберите оптимальный режим работы</p>
+              <div class="performance-selector">
+                <label class="performance-option">
+                  <input type="radio" name="performance" value="high">
+                  <div class="performance-content">
+                    <div class="performance-icon">🚀</div>
+                    <div class="performance-text">
+                      <strong>Высокая</strong>
+                      <span>Максимальное качество</span>
+                    </div>
+                  </div>
+                </label>
+                <label class="performance-option active">
+                  <input type="radio" name="performance" value="balanced" checked>
+                  <div class="performance-content">
+                    <div class="performance-icon">⚖️</div>
+                    <div class="performance-text">
+                      <strong>Сбалансированная</strong>
+                      <span>Оптимальный баланс</span>
+                    </div>
+                  </div>
+                </label>
+                <label class="performance-option">
+                  <input type="radio" name="performance" value="battery">
+                  <div class="performance-content">
+                    <div class="performance-icon">🔋</div>
+                    <div class="performance-text">
+                      <strong>Экономия</strong>
+                      <span>Минимум ресурсов</span>
+                    </div>
+                  </div>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section class="getting-started-section">
+      <div class="container">
+        <h2 class="section-title">Начало работы</h2>
+        <div class="getting-started-content">
+          <div class="getting-started-text">
+            <h3>Готовы начать?</h3>
+            <p>Horizon UI автоматически активируется на страницах 1C:Предприятие. Откройте любую страницу 1C, чтобы увидеть новый интерфейс в действии.</p>
+            
+            <div class="tips-list">
+              <div class="tip-item">
+                <div class="tip-icon">💡</div>
+                <div class="tip-text">
+                  <strong>Совет:</strong> Используйте иконку расширения в панели инструментов для быстрого доступа к настройкам
+                </div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-icon">⌨️</div>
+                <div class="tip-text">
+                  <strong>Горячие клавиши:</strong> Нажмите Tab для навигации по элементам, Enter для активации
+                </div>
+              </div>
+              <div class="tip-item">
+                <div class="tip-icon">🔍</div>
+                <div class="tip-text">
+                  <strong>Поиск:</strong> Используйте глобальный поиск в верхней части страницы для быстрого поиска
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="getting-started-preview">
+            <div class="preview-window">
+              <div class="preview-header">
+                <div class="preview-controls">
+                  <div class="control-dot red"></div>
+                  <div class="control-dot yellow"></div>
+                  <div class="control-dot green"></div>
+                </div>
+                <div class="preview-title">1C:Предприятие - Horizon UI</div>
+              </div>
+              <div class="preview-content">
+                <div class="preview-sidebar">
+                  <div class="sidebar-item active"></div>
+                  <div class="sidebar-item"></div>
+                  <div class="sidebar-item"></div>
+                  <div class="sidebar-item"></div>
+                </div>
+                <div class="preview-main">
+                  <div class="main-header"></div>
+                  <div class="main-content">
+                    <div class="content-card"></div>
+                    <div class="content-card"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Actions Section -->
+    <section class="actions-section">
+      <div class="container">
+        <div class="actions-content">
+          <h2>Все готово!</h2>
+          <p>Horizon UI настроен и готов к использованию. Откройте страницу 1C или перейдите к расширенным настройкам.</p>
+          
+          <div class="action-buttons">
+            <button class="btn btn-primary" id="openDemo">
+              <span class="btn-icon">🚀</span>
+              Открыть демо
+            </button>
+            <button class="btn btn-secondary" id="openSettings">
+              <span class="btn-icon">⚙️</span>
+              Настройки
+            </button>
+            <button class="btn btn-outline" id="viewDocs">
+              <span class="btn-icon">📚</span>
+              Документация
+            </button>
+          </div>
+          
+          <div class="additional-links">
+            <a href="#" id="skipWelcome" class="skip-link">Больше не показывать это окно</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="welcome-footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-left">
+            <p>&copy; 2024 Horizon UI for 1C. Все права защищены.</p>
+          </div>
+          <div class="footer-right">
+            <a href="#" class="footer-link">Поддержка</a>
+            <a href="#" class="footer-link">Обратная связь</a>
+            <a href="#" class="footer-link">GitHub</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="welcome.js"></script>
+</body>
+</html>

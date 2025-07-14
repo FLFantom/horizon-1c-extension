@@ -1,49 +1,288 @@
 <!-- popup/popup.html -->
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
   <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Horizon UI for 1C</title>
   <link rel="stylesheet" href="popup.css">
 </head>
 <body>
   <div class="popup-container">
     <div class="popup-header">
-      <h3>Horizon UI for 1C</h3>
+      <div class="header-content">
+        <h3 class="header-title">Horizon UI for 1C</h3>
+        <p class="header-subtitle">Современный интерфейс для 1C:Предприятие</p>
+      </div>
+      <div class="header-decoration"></div>
     </div>
     
     <div class="popup-content">
-      <div class="setting-item">
-        <label class="toggle-switch">
-          <input type="checkbox" id="enableHorizon" checked>
-          <span class="slider"></span>
-        </label>
-        <span class="setting-label">Включить Horizon UI</span>
+      <!-- Статус индикатор -->
+      <div class="status-section">
+        <div class="status-indicator" id="statusIndicator">
+          <div class="status-icon" id="statusIcon">✅</div>
+          <div class="status-info">
+            <div class="status-text" id="statusText">Horizon UI активен</div>
+            <div class="status-details" id="statusDetails">Страница трансформирована</div>
+          </div>
+          <div class="status-toggle">
+            <label class="toggle-switch">
+              <input type="checkbox" id="enableHorizon" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
       </div>
-      
-      <div class="setting-item">
-        <label for="themeSelect">Тема:</label>
-        <select id="themeSelect">
-          <option value="light">Светлая</option>
-          <option value="dark">Темная</option>
-          <option value="auto">Автоматически</option>
-        </select>
+
+      <!-- Быстрые действия -->
+      <div class="quick-actions">
+        <button class="quick-action-btn" id="refreshPage" title="Обновить страницу">
+          <span class="action-icon">🔄</span>
+          <span class="action-text">Обновить</span>
+        </button>
+        <button class="quick-action-btn" id="openSettings" title="Открыть настройки">
+          <span class="action-icon">⚙️</span>
+          <span class="action-text">Настройки</span>
+        </button>
+        <button class="quick-action-btn" id="reportIssue" title="Сообщить о проблеме">
+          <span class="action-icon">🐛</span>
+          <span class="action-text">Проблема</span>
+        </button>
       </div>
-      
-      <div class="setting-item">
-        <label class="toggle-switch">
-          <input type="checkbox" id="enableAnimations" checked>
-          <span class="slider"></span>
-        </label>
-        <span class="setting-label">Анимации</span>
+
+      <!-- Основные настройки -->
+      <div class="settings-section">
+        <div class="section-header">
+          <h4 class="section-title">
+            <span class="section-icon">🎨</span>
+            Внешний вид
+          </h4>
+        </div>
+        
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label" for="themeSelect">Тема интерфейса</label>
+              <span class="setting-description">Выберите цветовую схему</span>
+            </div>
+            <div class="setting-control">
+              <select id="themeSelect" class="custom-select">
+                <option value="light">Светлая</option>
+                <option value="dark">Темная</option>
+                <option value="auto">Автоматически</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label">Акцентный цвет</label>
+              <span class="setting-description">Основной цвет интерфейса</span>
+            </div>
+            <div class="setting-control">
+              <div class="color-picker" id="colorPicker">
+                <div class="color-option selected" data-color="#4318FF" style="background: #4318FF"></div>
+                <div class="color-option" data-color="#7551FF" style="background: #7551FF"></div>
+                <div class="color-option" data-color="#48BB78" style="background: #48BB78"></div>
+                <div class="color-option" data-color="#ED8936" style="background: #ED8936"></div>
+                <div class="color-option" data-color="#F56565" style="background: #F56565"></div>
+                <div class="color-option" data-color="#4299E1" style="background: #4299E1"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label" for="enableAnimations">Анимации</label>
+              <span class="setting-description">Плавные переходы и эффекты</span>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="enableAnimations" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label" for="compactMode">Компактный режим</label>
+              <span class="setting-description">Уменьшенные отступы</span>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="compactMode">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div class="popup-actions">
-        <button id="saveSettings" class="btn-primary">Сохранить</button>
-        <button id="resetSettings" class="btn-secondary">Сброс</button>
+
+      <!-- Производительность -->
+      <div class="settings-section">
+        <div class="section-header">
+          <h4 class="section-title">
+            <span class="section-icon">⚡</span>
+            Производительность
+          </h4>
+        </div>
+        
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label" for="performanceSelect">Режим производительности</label>
+              <span class="setting-description">Баланс между качеством и скоростью</span>
+            </div>
+            <div class="setting-control">
+              <select id="performanceSelect" class="custom-select">
+                <option value="high">Высокая</option>
+                <option value="balanced" selected>Сбалансированная</option>
+                <option value="battery">Экономия батареи</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label" for="autoDetect">Автоопределение 1C</label>
+              <span class="setting-description">Автоматически активировать на страницах 1C</span>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="autoDetect" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Доступность -->
+      <div class="settings-section">
+        <div class="section-header">
+          <h4 class="section-title">
+            <span class="section-icon">♿</span>
+            Доступность
+          </h4>
+        </div>
+        
+        <div class="setting-group">
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label" for="highContrast">Высокий контраст</label>
+              <span class="setting-description">Улучшенная видимость текста</span>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="highContrast">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label" for="reducedMotion">Уменьшить движение</label>
+              <span class="setting-description">Отключить анимации для комфорта</span>
+            </div>
+            <div class="setting-control">
+              <label class="toggle-switch">
+                <input type="checkbox" id="reducedMotion">
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="setting-item">
+            <div class="setting-info">
+              <label class="setting-label" for="fontSizeSelect">Размер шрифта</label>
+              <span class="setting-description">Настройка размера текста</span>
+            </div>
+            <div class="setting-control">
+              <select id="fontSizeSelect" class="custom-select">
+                <option value="small">Маленький</option>
+                <option value="normal" selected>Обычный</option>
+                <option value="large">Большой</option>
+                <option value="extra-large">Очень большой</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Статистика -->
+      <div class="stats-section">
+        <div class="section-header">
+          <h4 class="section-title">
+            <span class="section-icon">📊</span>
+            Статистика
+          </h4>
+        </div>
+        
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="transformedCount">0</div>
+            <div class="stat-label">Страниц обработано</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="sessionCount">0</div>
+            <div class="stat-label">Сессий</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="performanceScore">-</div>
+            <div class="stat-label">Производительность</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="lastUsed">Никогда</div>
+            <div class="stat-label">Последнее использование</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Действия -->
+      <div class="actions-section">
+        <div class="action-buttons">
+          <button id="saveSettings" class="btn btn-primary">
+            <span class="btn-icon">💾</span>
+            Сохранить настройки
+          </button>
+          <button id="resetSettings" class="btn btn-secondary">
+            <span class="btn-icon">🔄</span>
+            Сбросить
+          </button>
+        </div>
+        
+        <div class="additional-actions">
+          <button id="exportSettings" class="btn btn-outline">
+            <span class="btn-icon">📤</span>
+            Экспорт настроек
+          </button>
+          <button id="importSettings" class="btn btn-outline">
+            <span class="btn-icon">📥</span>
+            Импорт настроек
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Футер -->
+    <div class="popup-footer">
+      <div class="footer-links">
+        <a href="#" id="openHelp" class="footer-link">Справка</a>
+        <a href="#" id="openChangelog" class="footer-link">Что нового</a>
+        <a href="#" id="openFeedback" class="footer-link">Обратная связь</a>
+      </div>
+      <div class="footer-version">
+        v2.0.0
       </div>
     </div>
   </div>
-  
+
+  <!-- Скрытый input для импорта файлов -->
+  <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
   <script src="popup.js"></script>
 </body>
 </html>
