@@ -2,14 +2,13 @@
   "manifest_version": 3,
   "name": "Horizon UI for 1C:Enterprise",
   "version": "2.0.0",
-  "description": "Трансформирует интерфейс 1C под современный дизайн Horizon UI с улучшенной производительностью и функциональностью",
+  "description": "Трансформирует интерфейс 1C под современный дизайн Horizon UI",
   
   "permissions": [
     "activeTab",
     "storage",
     "scripting",
-    "tabs",
-    "contextMenus"
+    "tabs"
   ],
   
   "host_permissions": [
@@ -34,9 +33,6 @@
         "*://*/*/en_US/*"
       ],
       "js": [
-        "horizon-1c-extension/content/horizon-performance.js",
-        "horizon-1c-extension/content/horizon-accessibility.js",
-        "horizon-1c-extension/content/horizon-components.js",
         "horizon-1c-extension/content/content.js"
       ],
       "css": [
@@ -74,7 +70,5 @@
       ],
       "matches": ["<all_urls>"]
     }
-  ],
-  
-  "options_page": "horizon-1c-extension/options/options.html"
+  ]
 }
