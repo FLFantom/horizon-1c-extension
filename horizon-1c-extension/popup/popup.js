@@ -27,11 +27,15 @@ class HorizonPopup {
   }
 
   async init() {
-    await this.loadSettings();
-    await this.loadStats();
-    this.updateUI();
-    this.bindEvents();
-    this.checkCurrentTab();
+    try {
+      await this.loadSettings();
+      await this.loadStats();
+      this.updateUI();
+      this.bindEvents();
+      this.checkCurrentTab();
+    } catch (error) {
+      console.error('Horizon UI: Ошибка инициализации popup:', error);
+    }
   }
 
   async loadSettings() {
@@ -41,7 +45,7 @@ class HorizonPopup {
         this.settings = { ...this.settings, ...result.horizonSettings };
       }
     } catch (error) {
-      console.error('Ошибка загрузки настроек:', error);
+      console.error('Horizon UI: Ошибка загрузки настроек:', error);
     }
   }
 
@@ -52,7 +56,7 @@ class HorizonPopup {
         this.stats = { ...this.stats, ...result.horizonStats };
       }
     } catch (error) {
-      console.error('Ошибка загрузки статистики:', error);
+      console.error('Horizon UI: Ошибка загрузки статистики:', error);
     }
   }
 
@@ -62,7 +66,7 @@ class HorizonPopup {
       await this.notifyContentScript();
       this.showNotification('Настройки сохранены!', 'success');
     } catch (error) {
-      console.error('Ошибка сохранения настроек:', error);
+      console.error('Horizon UI: Ошибка сохранения настроек:', error);
       this.showNotification('Ошибка сохранения настроек', 'error');
     }
   }
@@ -77,163 +81,210 @@ class HorizonPopup {
         });
       }
     } catch (error) {
-      console.log('Content script недоступен');
+      console.log('Horizon UI: Content script недоступен');
     }
   }
 
   updateUI() {
-    // Обновляем статус
-    const statusIndicator = document.getElementById('statusIndicator');
-    const statusIcon = document.getElementById('statusIcon');
-    const statusText = document.getElementById('statusText');
-    const statusDetails = document.getElementById('statusDetails');
-    
-    if (this.settings.enabled) {
-      statusIndicator.className = 'status-indicator active';
-      statusIcon.textContent = '✅';
-      statusText.textContent = 'Horizon UI активен';
-      statusDetails.textContent = 'Интерфейс трансформирован';
-    } else {
-      statusIndicator.className = 'status-indicator inactive';
-      statusIcon.textContent = '❌';
-      statusText.textContent = 'Horizon UI отключен';
-      statusDetails.textContent = 'Нажмите для активации';
-    }
-
-    // Обновляем переключатели
-    document.getElementById('enableHorizon').checked = this.settings.enabled;
-    document.getElementById('enableAnimations').checked = this.settings.animations;
-    document.getElementById('compactMode').checked = this.settings.compactMode;
-    document.getElementById('autoDetect').checked = this.settings.autoDetect;
-    document.getElementById('highContrast').checked = this.settings.accessibility.highContrast;
-    document.getElementById('reducedMotion').checked = this.settings.accessibility.reducedMotion;
-
-    // Обновляем селекты
-    document.getElementById('themeSelect').value = this.settings.theme;
-    document.getElementById('performanceSelect').value = this.settings.performance;
-    document.getElementById('fontSizeSelect').value = this.settings.accessibility.fontSize;
-
-    // Обновляем цветовую палитру
-    document.querySelectorAll('.color-option').forEach(option => {
-      option.classList.remove('selected');
-      if (option.dataset.color === this.settings.accentColor) {
-        option.classList.add('selected');
+    try {
+      // Обновляем статус
+      const statusIndicator = document.getElementById('statusIndicator');
+      const statusIcon = document.getElementById('statusIcon');
+      const statusText = document.getElementById('statusText');
+      const statusDetails = document.getElementById('statusDetails');
+      
+      if (statusIndicator && statusIcon && statusText && statusDetails) {
+        if (this.settings.enabled) {
+          statusIndicator.className = 'status-indicator active';
+          statusIcon.textContent = '✅';
+          statusText.textContent = 'Horizon UI активен';
+          statusDetails.textContent = 'Интерфейс трансформирован';
+        } else {
+          statusIndicator.className = 'status-indicator inactive';
+          statusIcon.textContent = '❌';
+          statusText.textContent = 'Horizon UI отключен';
+          statusDetails.textContent = 'Нажмите для активации';
+        }
       }
-    });
 
-    // Обновляем статистику
-    document.getElementById('transformedCount').textContent = this.stats.transformedPages;
-    document.getElementById('sessionCount').textContent = this.stats.totalSessions;
-    document.getElementById('performanceScore').textContent = this.getPerformanceScore();
-    document.getElementById('lastUsed').textContent = this.formatLastUsed();
+      // Обновляем переключатели
+      this.setElementChecked('enableHorizon', this.settings.enabled);
+      this.setElementChecked('enableAnimations', this.settings.animations);
+      this.setElementChecked('compactMode', this.settings.compactMode);
+      this.setElementChecked('autoDetect', this.settings.autoDetect);
+      
+      if (this.settings.accessibility) {
+        this.setElementChecked('highContrast', this.settings.accessibility.highContrast);
+        this.setElementChecked('reducedMotion', this.settings.accessibility.reducedMotion);
+      }
+
+      // Обновляем селекты
+      this.setElementValue('themeSelect', this.settings.theme);
+      this.setElementValue('performanceSelect', this.settings.performance);
+      
+      if (this.settings.accessibility) {
+        this.setElementValue('fontSizeSelect', this.settings.accessibility.fontSize);
+      }
+
+      // Обновляем цветовую палитру
+      document.querySelectorAll('.color-option').forEach(option => {
+        option.classList.remove('selected');
+        if (option.dataset.color === this.settings.accentColor) {
+          option.classList.add('selected');
+        }
+      });
+
+      // Обновляем статистику
+      this.setElementText('transformedCount', this.stats.transformedPages);
+      this.setElementText('sessionCount', this.stats.totalSessions);
+      this.setElementText('performanceScore', this.getPerformanceScore());
+      this.setElementText('lastUsed', this.formatLastUsed());
+    } catch (error) {
+      console.error('Horizon UI: Ошибка обновления UI:', error);
+    }
+  }
+
+  setElementChecked(id, checked) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.checked = checked;
+    }
+  }
+
+  setElementValue(id, value) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.value = value;
+    }
+  }
+
+  setElementText(id, text) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.textContent = text;
+    }
   }
 
   bindEvents() {
-    // Главный переключатель
-    document.getElementById('enableHorizon').addEventListener('change', (e) => {
-      this.settings.enabled = e.target.checked;
-      this.updateUI();
-      this.saveSettings();
-    });
-
-    // Настройки внешнего вида
-    document.getElementById('themeSelect').addEventListener('change', (e) => {
-      this.settings.theme = e.target.value;
-      this.saveSettings();
-    });
-
-    document.getElementById('enableAnimations').addEventListener('change', (e) => {
-      this.settings.animations = e.target.checked;
-      this.saveSettings();
-    });
-
-    document.getElementById('compactMode').addEventListener('change', (e) => {
-      this.settings.compactMode = e.target.checked;
-      this.saveSettings();
-    });
-
-    // Цветовая палитра
-    document.querySelectorAll('.color-option').forEach(option => {
-      option.addEventListener('click', () => {
-        document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
-        option.classList.add('selected');
-        this.settings.accentColor = option.dataset.color;
+    try {
+      // Главный переключатель
+      this.bindEvent('enableHorizon', 'change', (e) => {
+        this.settings.enabled = e.target.checked;
+        this.updateUI();
         this.saveSettings();
       });
-    });
 
-    // Производительность
-    document.getElementById('performanceSelect').addEventListener('change', (e) => {
-      this.settings.performance = e.target.value;
-      this.saveSettings();
-    });
+      // Настройки внешнего вида
+      this.bindEvent('themeSelect', 'change', (e) => {
+        this.settings.theme = e.target.value;
+        this.saveSettings();
+      });
 
-    document.getElementById('autoDetect').addEventListener('change', (e) => {
-      this.settings.autoDetect = e.target.checked;
-      this.saveSettings();
-    });
+      this.bindEvent('enableAnimations', 'change', (e) => {
+        this.settings.animations = e.target.checked;
+        this.saveSettings();
+      });
 
-    // Доступность
-    document.getElementById('highContrast').addEventListener('change', (e) => {
-      this.settings.accessibility.highContrast = e.target.checked;
-      this.saveSettings();
-    });
+      this.bindEvent('compactMode', 'change', (e) => {
+        this.settings.compactMode = e.target.checked;
+        this.saveSettings();
+      });
 
-    document.getElementById('reducedMotion').addEventListener('change', (e) => {
-      this.settings.accessibility.reducedMotion = e.target.checked;
-      this.saveSettings();
-    });
+      // Цветовая палитра
+      document.querySelectorAll('.color-option').forEach(option => {
+        option.addEventListener('click', () => {
+          document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+          option.classList.add('selected');
+          this.settings.accentColor = option.dataset.color;
+          this.saveSettings();
+        });
+      });
 
-    document.getElementById('fontSizeSelect').addEventListener('change', (e) => {
-      this.settings.accessibility.fontSize = e.target.value;
-      this.saveSettings();
-    });
+      // Производительность
+      this.bindEvent('performanceSelect', 'change', (e) => {
+        this.settings.performance = e.target.value;
+        this.saveSettings();
+      });
 
-    // Кнопки действий
-    document.getElementById('saveSettings').addEventListener('click', () => {
-      this.saveSettings();
-    });
+      this.bindEvent('autoDetect', 'change', (e) => {
+        this.settings.autoDetect = e.target.checked;
+        this.saveSettings();
+      });
 
-    document.getElementById('resetSettings').addEventListener('click', () => {
-      this.resetSettings();
-    });
+      // Доступность
+      this.bindEvent('highContrast', 'change', (e) => {
+        if (!this.settings.accessibility) this.settings.accessibility = {};
+        this.settings.accessibility.highContrast = e.target.checked;
+        this.saveSettings();
+      });
 
-    document.getElementById('exportSettings').addEventListener('click', () => {
-      this.exportSettings();
-    });
+      this.bindEvent('reducedMotion', 'change', (e) => {
+        if (!this.settings.accessibility) this.settings.accessibility = {};
+        this.settings.accessibility.reducedMotion = e.target.checked;
+        this.saveSettings();
+      });
 
-    document.getElementById('importSettings').addEventListener('click', () => {
-      this.importSettings();
-    });
+      this.bindEvent('fontSizeSelect', 'change', (e) => {
+        if (!this.settings.accessibility) this.settings.accessibility = {};
+        this.settings.accessibility.fontSize = e.target.value;
+        this.saveSettings();
+      });
 
-    // Быстрые действия
-    document.getElementById('refreshPage').addEventListener('click', () => {
-      this.refreshCurrentTab();
-    });
+      // Кнопки действий
+      this.bindEvent('saveSettings', 'click', () => {
+        this.saveSettings();
+      });
 
-    document.getElementById('openSettings').addEventListener('click', () => {
-      chrome.runtime.openOptionsPage();
-    });
+      this.bindEvent('resetSettings', 'click', () => {
+        this.resetSettings();
+      });
 
-    document.getElementById('reportIssue').addEventListener('click', () => {
-      this.reportIssue();
-    });
+      this.bindEvent('exportSettings', 'click', () => {
+        this.exportSettings();
+      });
 
-    // Ссылки
-    document.getElementById('openHelp').addEventListener('click', (e) => {
-      e.preventDefault();
-      chrome.tabs.create({ url: 'https://github.com/your-repo/horizon-1c-extension/wiki' });
-    });
+      this.bindEvent('importSettings', 'click', () => {
+        this.importSettings();
+      });
 
-    document.getElementById('openChangelog').addEventListener('click', (e) => {
-      e.preventDefault();
-      chrome.tabs.create({ url: 'https://github.com/your-repo/horizon-1c-extension/releases' });
-    });
+      // Быстрые действия
+      this.bindEvent('refreshPage', 'click', () => {
+        this.refreshCurrentTab();
+      });
 
-    document.getElementById('openFeedback').addEventListener('click', (e) => {
-      e.preventDefault();
-      chrome.tabs.create({ url: 'https://github.com/your-repo/horizon-1c-extension/issues' });
-    });
+      this.bindEvent('openSettings', 'click', () => {
+        chrome.runtime.openOptionsPage();
+      });
+
+      this.bindEvent('reportIssue', 'click', () => {
+        this.reportIssue();
+      });
+
+      // Ссылки
+      this.bindEvent('openHelp', 'click', (e) => {
+        e.preventDefault();
+        chrome.tabs.create({ url: 'https://github.com/your-repo/horizon-1c-extension/wiki' });
+      });
+
+      this.bindEvent('openChangelog', 'click', (e) => {
+        e.preventDefault();
+        chrome.tabs.create({ url: 'https://github.com/your-repo/horizon-1c-extension/releases' });
+      });
+
+      this.bindEvent('openFeedback', 'click', (e) => {
+        e.preventDefault();
+        chrome.tabs.create({ url: 'https://github.com/your-repo/horizon-1c-extension/issues' });
+      });
+    } catch (error) {
+      console.error('Horizon UI: Ошибка привязки событий:', error);
+    }
+  }
+
+  bindEvent(id, event, handler) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.addEventListener(event, handler);
+    }
   }
 
   async checkCurrentTab() {
@@ -245,11 +296,12 @@ class HorizonPopup {
         this.updateUI();
       }
     } catch (error) {
-      console.log('Ошибка проверки текущей вкладки:', error);
+      console.log('Horizon UI: Ошибка проверки текущей вкладки:', error);
     }
   }
 
   is1CUrl(url) {
+    if (!url) return false;
     const patterns = [
       '/hs/v8reader/',
       'clobus.uz',
@@ -304,41 +356,57 @@ class HorizonPopup {
   }
 
   exportSettings() {
-    const dataStr = JSON.stringify(this.settings, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-    const url = URL.createObjectURL(dataBlob);
-    
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `horizon-ui-settings-${new Date().toISOString().split('T')[0]}.json`;
-    link.click();
-    
-    URL.revokeObjectURL(url);
-    this.showNotification('Настройки экспортированы!', 'success');
+    try {
+      const dataStr = JSON.stringify(this.settings, null, 2);
+      const dataBlob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(dataBlob);
+      
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `horizon-ui-settings-${new Date().toISOString().split('T')[0]}.json`;
+      link.click();
+      
+      URL.revokeObjectURL(url);
+      this.showNotification('Настройки экспортированы!', 'success');
+    } catch (error) {
+      console.error('Horizon UI: Ошибка экспорта настроек:', error);
+      this.showNotification('Ошибка экспорта настроек', 'error');
+    }
   }
 
   importSettings() {
-    const fileInput = document.getElementById('importFileInput');
-    fileInput.click();
-    
-    fileInput.onchange = async (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        try {
-          const text = await file.text();
-          const importedSettings = JSON.parse(text);
-          
-          if (confirm('Импортировать настройки? Текущие настройки будут заменены.')) {
-            this.settings = { ...this.settings, ...importedSettings };
-            await this.saveSettings();
-            this.updateUI();
-            this.showNotification('Настройки импортированы!', 'success');
+    try {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.json';
+      fileInput.style.display = 'none';
+      document.body.appendChild(fileInput);
+      
+      fileInput.click();
+      
+      fileInput.onchange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          try {
+            const text = await file.text();
+            const importedSettings = JSON.parse(text);
+            
+            if (confirm('Импортировать настройки? Текущие настройки будут заменены.')) {
+              this.settings = { ...this.settings, ...importedSettings };
+              await this.saveSettings();
+              this.updateUI();
+              this.showNotification('Настройки импортированы!', 'success');
+            }
+          } catch (error) {
+            this.showNotification('Ошибка импорта настроек', 'error');
           }
-        } catch (error) {
-          this.showNotification('Ошибка импорта настроек', 'error');
         }
-      }
-    };
+        document.body.removeChild(fileInput);
+      };
+    } catch (error) {
+      console.error('Horizon UI: Ошибка импорта настроек:', error);
+      this.showNotification('Ошибка импорта настроек', 'error');
+    }
   }
 
   async refreshCurrentTab() {
@@ -355,65 +423,89 @@ class HorizonPopup {
   }
 
   reportIssue() {
-    const issueData = {
-      version: '2.0.0',
-      userAgent: navigator.userAgent,
-      settings: this.settings,
-      timestamp: new Date().toISOString()
-    };
-    
-    const issueBody = `**Описание проблемы:**
+    try {
+      const issueData = {
+        version: '2.0.0',
+        userAgent: navigator.userAgent,
+        settings: this.settings,
+        timestamp: new Date().toISOString()
+      };
+      
+      const issueBody = `**Описание проблемы:**
 [Опишите проблему]
 
 **Системная информация:**
 \`\`\`json
 ${JSON.stringify(issueData, null, 2)}
 \`\`\``;
-    
-    const url = `https://github.com/your-repo/horizon-1c-extension/issues/new?title=Bug%20Report&body=${encodeURIComponent(issueBody)}`;
-    chrome.tabs.create({ url });
+      
+      const url = `https://github.com/your-repo/horizon-1c-extension/issues/new?title=Bug%20Report&body=${encodeURIComponent(issueBody)}`;
+      chrome.tabs.create({ url });
+    } catch (error) {
+      console.error('Horizon UI: Ошибка создания отчета о проблеме:', error);
+      this.showNotification('Ошибка создания отчета', 'error');
+    }
   }
 
   showNotification(message, type = 'info') {
-    // Удаляем существующие уведомления
-    document.querySelectorAll('.toast').forEach(toast => toast.remove());
-    
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    
-    const icons = {
-      success: '✅',
-      error: '❌',
-      warning: '⚠️',
-      info: 'ℹ️'
-    };
-    
-    toast.innerHTML = `
-      <span class="toast-icon">${icons[type] || icons.info}</span>
-      <span class="toast-message">${message}</span>
-      <button class="toast-close">×</button>
-    `;
-    
-    document.body.appendChild(toast);
-    
-    // Показываем toast
-    setTimeout(() => toast.classList.add('show'), 100);
-    
-    // Автоматическое скрытие
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    }, 3000);
-    
-    // Закрытие по клику
-    toast.querySelector('.toast-close').addEventListener('click', () => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    });
+    try {
+      // Удаляем существующие уведомления
+      document.querySelectorAll('.notification').forEach(notification => notification.remove());
+      
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      
+      const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+      };
+      
+      notification.innerHTML = `
+        <span class="notification-icon">${icons[type] || icons.info}</span>
+        <span class="notification-message">${message}</span>
+        <button class="notification-close">×</button>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Показываем notification
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Автоматическое скрытие
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.remove();
+          }
+        }, 300);
+      }, 3000);
+      
+      // Закрытие по клику
+      const closeBtn = notification.querySelector('.notification-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          notification.classList.remove('show');
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.remove();
+            }
+          }, 300);
+        });
+      }
+    } catch (error) {
+      console.error('Horizon UI: Ошибка показа уведомления:', error);
+    }
   }
 }
 
 // Инициализируем popup
 document.addEventListener('DOMContentLoaded', () => {
-  new HorizonPopup();
+  try {
+    new HorizonPopup();
+  } catch (error) {
+    console.error('Horizon UI: Критическая ошибка инициализации popup:', error);
+  }
 });

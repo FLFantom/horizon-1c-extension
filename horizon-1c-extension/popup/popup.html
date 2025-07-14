@@ -151,6 +151,87 @@
       </div>
     </div>
 
+    <!-- Accessibility Settings -->
+    <div class="settings-section">
+      <div class="section-header">
+        <h4 class="section-title">
+          <span>♿</span>
+          Доступность
+        </h4>
+      </div>
+      
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Высокий контраст</div>
+          <div class="setting-description">Улучшенная видимость элементов</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="highContrast">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Уменьшенная анимация</div>
+          <div class="setting-description">Минимум движения для комфорта</div>
+        </div>
+        <div class="setting-control">
+          <label class="toggle-switch">
+            <input type="checkbox" id="reducedMotion">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <div class="setting-item">
+        <div class="setting-info">
+          <div class="setting-label">Размер шрифта</div>
+          <div class="setting-description">Настройка размера текста</div>
+        </div>
+        <div class="setting-control">
+          <div class="custom-select">
+            <select id="fontSizeSelect">
+              <option value="small">Маленький</option>
+              <option value="normal" selected>Обычный</option>
+              <option value="large">Большой</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="settings-section">
+      <div class="section-header">
+        <h4 class="section-title">
+          <span>📊</span>
+          Статистика
+        </h4>
+      </div>
+      
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="transformedCount">0</div>
+          <div class="stat-label">Страниц трансформировано</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="sessionCount">0</div>
+          <div class="stat-label">Сессий</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="performanceScore">85%</div>
+          <div class="stat-label">Производительность</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="lastUsed">Никогда</div>
+          <div class="stat-label">Последнее использование</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Actions -->
     <div class="actions-section">
       <div class="action-buttons">

@@ -45,6 +45,7 @@ class HorizonUITransformer {
       }
     } catch (error) {
       console.error('Horizon UI: Ошибка инициализации:', error);
+      this.reportError(error);
     }
   }
 
@@ -461,28 +462,39 @@ class HorizonUITransformer {
 
   setupMessageListener() {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-      switch (request.action) {
-        case 'updateSettings':
-          this.updateSettings(request.settings);
-          sendResponse({ success: true });
-          break;
-        case 'toggleHorizonUI':
-          this.toggleUI(request.enabled);
-          sendResponse({ success: true });
-          break;
-        case 'getPerformanceMetrics':
-          if (this.performanceManager) {
-            sendResponse(this.performanceManager.getMetrics());
-          } else {
-            sendResponse(null);
-          }
-          break;
-        case 'autoActivate':
-          if (this.settings.autoDetect && !this.isTransformed) {
-            this.transformPage();
-          }
-          sendResponse({ success: true });
-          break;
+      try {
+        switch (request.action) {
+          case 'updateSettings':
+            this.updateSettings(request.settings);
+            sendResponse({ success: true });
+            break;
+          case 'toggleHorizonUI':
+            this.toggleUI(request.enabled);
+            sendResponse({ success: true });
+            break;
+          case 'getPerformanceMetrics':
+            if (this.performanceManager) {
+              sendResponse(this.performanceManager.getMetrics());
+            } else {
+              sendResponse(null);
+            }
+            break;
+          case 'autoActivate':
+            if (this.settings.autoDetect && !this.isTransformed) {
+              this.transformPage();
+            }
+            sendResponse({ success: true });
+            break;
+          case 'showPerformanceNotification':
+            this.showNotification(request.message, 'warning');
+            sendResponse({ success: true });
+            break;
+          default:
+            sendResponse({ error: 'Unknown action' });
+        }
+      } catch (error) {
+        console.error('Horizon UI: Ошибка обработки сообщения:', error);
+        sendResponse({ error: error.message });
       }
     });
   }
@@ -526,14 +538,146 @@ class HorizonUITransformer {
   }
 
   reportPageTransformed() {
-    chrome.runtime.sendMessage({
-      action: 'pageTransformed',
-      data: {
-        url: window.location.href,
-        timestamp: Date.now(),
-        elementsTransformed: document.querySelectorAll('.horizon-transformed').length
+    try {
+      chrome.runtime.sendMessage({
+        action: 'pageTransformed',
+        data: {
+          url: window.location.href,
+          timestamp: Date.now(),
+          elementsTransformed: document.querySelectorAll('.horizon-transformed').length
+        }
+      });
+    } catch (error) {
+      console.error('Horizon UI: Ошибка отправки отчета о трансформации:', error);
+    }
+  }
+
+  reportError(error) {
+    try {
+      chrome.runtime.sendMessage({
+        action: 'errorReport',
+        error: {
+          message: error.message,
+          stack: error.stack,
+          url: window.location.href,
+          timestamp: Date.now()
+        }
+      });
+    } catch (sendError) {
+      console.error('Horizon UI: Ошибка отправки отчета об ошибке:', sendError);
+    }
+  }
+
+  showNotification(message, type = 'info') {
+    try {
+      // Удаляем существующие уведомления
+      document.querySelectorAll('.horizon-notification').forEach(notification => notification.remove());
+      
+      const notification = document.createElement('div');
+      notification.className = `horizon-notification horizon-notification-${type}`;
+      
+      const icons = {
+        success: '✅',
+        error: '❌',
+        warning: '⚠️',
+        info: 'ℹ️'
+      };
+      
+      notification.innerHTML = `
+        <span class="horizon-notification-icon">${icons[type] || icons.info}</span>
+        <span class="horizon-notification-message">${message}</span>
+        <button class="horizon-notification-close">×</button>
+      `;
+      
+      // Добавляем стили для уведомления
+      const style = document.createElement('style');
+      style.textContent = `
+        .horizon-notification {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          padding: 12px 16px;
+          border-radius: 8px;
+          color: white;
+          font-size: 14px;
+          font-weight: 500;
+          z-index: 10000;
+          max-width: 300px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+          transform: translateX(100%);
+          transition: transform 0.3s ease;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .horizon-notification.show {
+          transform: translateX(0);
+        }
+        .horizon-notification-success {
+          background: #48BB78;
+        }
+        .horizon-notification-error {
+          background: #F56565;
+        }
+        .horizon-notification-warning {
+          background: #ED8936;
+        }
+        .horizon-notification-info {
+          background: #4299E1;
+        }
+        .horizon-notification-close {
+          background: none;
+          border: none;
+          color: white;
+          cursor: pointer;
+          font-size: 16px;
+          margin-left: auto;
+          padding: 0;
+          opacity: 0.8;
+        }
+        .horizon-notification-close:hover {
+          opacity: 1;
+        }
+      `;
+      
+      document.head.appendChild(style);
+      document.body.appendChild(notification);
+      
+      // Показываем уведомление
+      setTimeout(() => notification.classList.add('show'), 100);
+      
+      // Автоматическое скрытие
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          if (notification.parentNode) {
+            notification.remove();
+          }
+          if (style.parentNode) {
+            style.remove();
+          }
+        }, 300);
+      }, 5000);
+      
+      // Закрытие по клику
+      const closeBtn = notification.querySelector('.horizon-notification-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+          notification.classList.remove('show');
+          setTimeout(() => {
+            if (notification.parentNode) {
+              notification.remove();
+            }
+            if (style.parentNode) {
+              style.remove();
+            }
+          }, 300);
+        });
       }
-    });
+    } catch (error) {
+      console.error('Horizon UI: Ошибка показа уведомления:', error);
+    }
   }
 
   mergeDeep(target, source) {
