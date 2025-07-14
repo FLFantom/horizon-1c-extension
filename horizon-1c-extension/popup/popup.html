@@ -1,0 +1,49 @@
+<!-- popup/popup.html -->
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <div class="popup-header">
+      <h3>Horizon UI for 1C</h3>
+    </div>
+    
+    <div class="popup-content">
+      <div class="setting-item">
+        <label class="toggle-switch">
+          <input type="checkbox" id="enableHorizon" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="setting-label">Включить Horizon UI</span>
+      </div>
+      
+      <div class="setting-item">
+        <label for="themeSelect">Тема:</label>
+        <select id="themeSelect">
+          <option value="light">Светлая</option>
+          <option value="dark">Темная</option>
+          <option value="auto">Автоматически</option>
+        </select>
+      </div>
+      
+      <div class="setting-item">
+        <label class="toggle-switch">
+          <input type="checkbox" id="enableAnimations" checked>
+          <span class="slider"></span>
+        </label>
+        <span class="setting-label">Анимации</span>
+      </div>
+      
+      <div class="popup-actions">
+        <button id="saveSettings" class="btn-primary">Сохранить</button>
+        <button id="resetSettings" class="btn-secondary">Сброс</button>
+      </div>
+    </div>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>

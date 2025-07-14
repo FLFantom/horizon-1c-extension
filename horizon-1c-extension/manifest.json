@@ -1,0 +1,68 @@
+{
+  "manifest_version": 3,
+  "name": "Horizon UI for 1C:Enterprise",
+  "version": "1.0.0",
+  "description": "Трансформирует интерфейс 1C под современный дизайн Horizon UI",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "declarativeContent"
+  ],
+  
+  "host_permissions": [
+    "*://*/*/hs/v8reader/*",
+    "*://localhost:*/*/hs/v8reader/*",
+    "*://*/*/hs/v8reader/*",
+    "*://clobus.uz/*",
+    "*://*.1cfresh.com/*"
+  ],
+  
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*/hs/v8reader/*",
+        "*://localhost:*/*/hs/v8reader/*", 
+        "*://*/*/hs/v8reader/*",
+        "*://clobus.uz/*",
+        "*://*.1cfresh.com/*"
+      ],
+      "js": [
+        "libs/react.min.js",
+        "libs/horizon-ui.min.js",
+        "content/horizon-components.js",
+        "content/content.js"
+      ],
+      "css": [
+        "content/horizon-styles.css"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Horizon UI Settings",
+    "default_icon": {
+      "16": "assets/icon-16.png",
+      "48": "assets/icon-48.png",
+      "128": "assets/icon-128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "assets/icon-16.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/horizon-styles.css",
+        "libs/horizon-ui.min.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}
