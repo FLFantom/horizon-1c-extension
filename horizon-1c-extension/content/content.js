@@ -1,4 +1,4 @@
-// content/content.js - Главный файл content script
+// content/content.js - Деликатная трансформация только элементов 1C
 
 class HorizonUITransformer {
   constructor() {
@@ -13,15 +13,7 @@ class HorizonUITransformer {
       accessibility: {
         highContrast: false,
         reducedMotion: false,
-        fontSize: 'normal',
-        keyboardNavigation: true,
-        focusIndicators: true,
-        screenReaderSupport: true
-      },
-      advanced: {
-        customCSS: '',
-        debugMode: false,
-        experimentalFeatures: false
+        fontSize: 'normal'
       }
     };
     
@@ -38,7 +30,7 @@ class HorizonUITransformer {
       await this.loadSettings();
       
       if (this.settings.enabled && this.is1CPage()) {
-        console.log('Horizon UI: Инициализация трансформации 1C страницы');
+        console.log('Horizon UI: Инициализация деликатной трансформации 1C элементов');
         await this.transformPage();
         this.setupMessageListener();
         this.setupMutationObserver();
@@ -73,6 +65,8 @@ class HorizonUITransformer {
     ];
     
     const hasPattern = patterns.some(pattern => url.includes(pattern));
+    
+    // Проверяем наличие специфичных элементов 1C
     const has1CElements = !!(
       document.querySelector('.v8-main-frame') ||
       document.querySelector('.SystemCommandBar') ||
@@ -80,7 +74,9 @@ class HorizonUITransformer {
       document.querySelector('.v8-dynamic-form') ||
       document.querySelector('.v8-dynamic-list-table') ||
       document.querySelector('.v8ui-ctl') ||
-      document.querySelector('[class*="v8"]')
+      document.querySelector('[class*="v8"]') ||
+      document.querySelector('input[name*="v8"]') ||
+      document.querySelector('form[name*="v8"]')
     );
     
     console.log('Horizon UI: Проверка 1C страницы:', { hasPattern, has1CElements, url });
@@ -96,28 +92,21 @@ class HorizonUITransformer {
     const startTime = performance.now();
     
     try {
-      console.log('Horizon UI: Начало трансформации страницы');
+      console.log('Horizon UI: Начало деликатной трансформации элементов 1C');
       
-      // Добавляем основные классы
-      document.documentElement.classList.add('horizon-ui');
-      document.body.classList.add('horizon-ui');
-      
-      // Применяем настройки
+      // НЕ добавляем классы к html/body - только к конкретным элементам
       this.applySettings();
       
       // Ждем загрузки DOM
       await this.waitForDOM();
       
-      // Трансформируем все элементы
-      this.transformAllElements();
-      
-      // Добавляем улучшения
-      this.addEnhancements();
+      // Трансформируем только специфичные элементы 1C
+      this.transformSpecific1CElements();
       
       this.isTransformed = true;
       
       const endTime = performance.now();
-      console.log(`Horizon UI: Страница трансформирована за ${endTime - startTime}ms`);
+      console.log(`Horizon UI: Элементы 1C трансформированы за ${endTime - startTime}ms`);
       
     } catch (error) {
       console.error('Horizon UI: Ошибка трансформации:', error);
@@ -128,46 +117,22 @@ class HorizonUITransformer {
   applySettings() {
     console.log('Horizon UI: Применение настроек:', this.settings);
     
-    // Применяем тему
+    // Применяем настройки только к root для CSS переменных
     document.documentElement.setAttribute('data-theme', this.settings.theme);
-    
-    // Применяем акцентный цвет
     document.documentElement.style.setProperty('--horizon-brand-500', this.settings.accentColor);
     document.documentElement.style.setProperty('--horizon-brand-600', this.darkenColor(this.settings.accentColor, 10));
     
-    // Компактный режим
+    // Добавляем классы-модификаторы только для наших элементов
     if (this.settings.compactMode) {
       document.documentElement.classList.add('horizon-compact');
-    } else {
-      document.documentElement.classList.remove('horizon-compact');
     }
     
-    // Отключение анимаций
     if (!this.settings.animations || this.settings.accessibility.reducedMotion) {
       document.documentElement.classList.add('horizon-no-animations');
-    } else {
-      document.documentElement.classList.remove('horizon-no-animations');
     }
     
-    // Высокий контраст
     if (this.settings.accessibility.highContrast) {
       document.documentElement.classList.add('horizon-high-contrast');
-    } else {
-      document.documentElement.classList.remove('horizon-high-contrast');
-    }
-    
-    // Размер шрифта
-    if (this.settings.accessibility.fontSize === 'large') {
-      document.documentElement.style.setProperty('--horizon-font-size-md', '1.125rem');
-      document.documentElement.style.setProperty('--horizon-font-size-sm', '1rem');
-    } else if (this.settings.accessibility.fontSize === 'small') {
-      document.documentElement.style.setProperty('--horizon-font-size-md', '0.875rem');
-      document.documentElement.style.setProperty('--horizon-font-size-sm', '0.75rem');
-    }
-    
-    // Пользовательский CSS
-    if (this.settings.advanced.customCSS) {
-      this.injectCustomCSS(this.settings.advanced.customCSS);
     }
   }
 
@@ -177,74 +142,58 @@ class HorizonUITransformer {
         resolve();
       } else {
         window.addEventListener('load', resolve);
-        // Также разрешаем через 3 секунды в любом случае
-        setTimeout(resolve, 3000);
+        setTimeout(resolve, 2000); // Уменьшили таймаут
       }
     });
   }
 
-  transformAllElements() {
-    console.log('Horizon UI: Трансформация всех элементов');
+  transformSpecific1CElements() {
+    console.log('Horizon UI: Трансформация специфичных элементов 1C');
     
-    // Трансформируем основные контейнеры
-    this.transformMainContainers();
+    let transformedCount = 0;
     
-    // Трансформируем кнопки
-    this.transformButtons();
+    // Трансформируем только кнопки, которые точно относятся к 1C
+    transformedCount += this.transform1CButtons();
     
-    // Трансформируем поля ввода
-    this.transformInputs();
+    // Трансформируем только поля ввода 1C
+    transformedCount += this.transform1CInputs();
     
-    // Трансформируем таблицы
-    this.transformTables();
+    // Трансформируем только таблицы 1C
+    transformedCount += this.transform1CTables();
     
-    // Трансформируем формы
-    this.transformForms();
+    // Трансформируем только формы 1C
+    transformedCount += this.transform1CForms();
     
-    // Трансформируем панели и контейнеры
-    this.transformPanels();
+    // Трансформируем только панели 1C
+    transformedCount += this.transform1CPanels();
     
-    // Трансформируем меню
-    this.transformMenus();
+    // Трансформируем только меню 1C
+    transformedCount += this.transform1CMenus();
     
-    // Трансформируем вкладки
-    this.transformTabs();
+    // Трансформируем только вкладки 1C
+    transformedCount += this.transform1CTabs();
+    
+    console.log(`Horizon UI: Трансформировано ${transformedCount} элементов 1C`);
   }
 
-  transformMainContainers() {
+  transform1CButtons() {
     const selectors = [
-      '.v8-main-frame',
-      '.v8-main-container',
-      '.SystemCommandBar',
-      '#SystemCommandBar',
-      '.v8-command-bar',
-      '.v8-toolbar'
-    ];
-    
-    selectors.forEach(selector => {
-      const elements = document.querySelectorAll(selector);
-      elements.forEach(element => {
-        element.classList.add('horizon-transformed');
-        console.log(`Horizon UI: Трансформирован контейнер: ${selector}`);
-      });
-    });
-  }
-
-  transformButtons() {
-    const selectors = [
-      'button',
-      'input[type="button"]',
-      'input[type="submit"]',
+      'button[class*="v8"]',
+      'input[type="button"][class*="v8"]',
+      'input[type="submit"][class*="v8"]',
       '.v8-button',
       '.v8-command-button',
-      '.v8ui-ctl-button'
+      '.v8ui-ctl-button',
+      '.SystemCommandBar button',
+      '#SystemCommandBar button'
     ];
     
+    let count = 0;
     selectors.forEach(selector => {
       const elements = document.querySelectorAll(selector);
       elements.forEach(element => {
         if (!element.classList.contains('horizon-transformed')) {
-          element.classList.add('horizon-transformed');
+          element.classList.add('horizon-transformed', 'horizon-btn');
           
           // Определяем тип кнопки
           const text = element.textContent || element.value || element.title || '';
@@ -252,22 +201,20 @@ class HorizonUITransformer {
             element.classList.add('secondary');
           }
           
-          console.log(`Horizon UI: Трансформирована кнопка: ${text}`);
+          count++;
+          console.log(`Horizon UI: Трансформирована кнопка 1C: ${text}`);
         }
       });
     });
+    
+    return count;
   }
 
-  transformInputs() {
+  transform1CInputs() {
     const selectors = [
-      'input[type="text"]',
-      'input[type="password"]',
-      'input[type="email"]',
-      'input[type="number"]',
-      'input[type="date"]',
-      'input[type="time"]',
-      'textarea',
-      'select',
+      'input[class*="v8"]',
+      'textarea[class*="v8"]',
+      'select[class*="v8"]',
       '.v8-input',
       '.v8-text-input',
       '.v8-number-input',
@@ -275,120 +222,144 @@ class HorizonUITransformer {
       '.v8ui-ctl-edit'
     ];
     
+    let count = 0;
     selectors.forEach(selector => {
       const elements = document.querySelectorAll(selector);
       elements.forEach(element => {
         if (!element.classList.contains('horizon-transformed')) {
-          element.classList.add('horizon-transformed');
-          console.log(`Horizon UI: Трансформировано поле ввода: ${selector}`);
+          element.classList.add('horizon-transformed', 'horizon-input');
+          count++;
+          console.log(`Horizon UI: Трансформировано поле ввода 1C: ${selector}`);
         }
       });
     });
+    
+    return count;
   }
 
-  transformTables() {
+  transform1CTables() {
     const selectors = [
-      'table',
+      'table[class*="v8"]',
       '.v8-dynamic-list-table',
       '.v8-table',
       '.v8-grid'
     ];
     
+    let count = 0;
     selectors.forEach(selector => {
       const elements = document.querySelectorAll(selector);
       elements.forEach(element => {
         if (!element.classList.contains('horizon-transformed')) {
-          element.classList.add('horizon-transformed');
-          
-          // Добавляем классы для заголовков и ячеек
-          const headers = element.querySelectorAll('th');
-          headers.forEach(header => header.classList.add('horizon-table-header'));
-          
-          const cells = element.querySelectorAll('td');
-          cells.forEach(cell => cell.classList.add('horizon-table-cell'));
-          
-          console.log(`Horizon UI: Трансформирована таблица с ${headers.length} заголовками и ${cells.length} ячейками`);
+          element.classList.add('horizon-transformed', 'horizon-table');
+          count++;
+          console.log(`Horizon UI: Трансформирована таблица 1C: ${selector}`);
         }
       });
     });
+    
+    return count;
   }
 
-  transformForms() {
+  transform1CForms() {
     const selectors = [
-      'form',
+      'form[class*="v8"]',
       '.v8-dynamic-form',
       '.v8-form',
       '.v8-form-container'
     ];
     
+    let count = 0;
     selectors.forEach(selector => {
       const elements = document.querySelectorAll(selector);
       elements.forEach(element => {
         if (!element.classList.contains('horizon-transformed')) {
-          element.classList.add('horizon-transformed');
-          console.log(`Horizon UI: Трансформирована форма: ${selector}`);
+          element.classList.add('horizon-transformed', 'horizon-form');
+          count++;
+          console.log(`Horizon UI: Трансформирована форма 1C: ${selector}`);
         }
       });
     });
+    
+    return count;
   }
 
-  transformPanels() {
+  transform1CPanels() {
     const selectors = [
       '.v8-panel',
       '.v8-container',
       '.v8-group-box',
-      '.v8-tab-panel'
+      '.v8-tab-panel',
+      '.SystemCommandBar',
+      '#SystemCommandBar'
     ];
     
+    let count = 0;
     selectors.forEach(selector => {
       const elements = document.querySelectorAll(selector);
       elements.forEach(element => {
         if (!element.classList.contains('horizon-transformed')) {
-          element.classList.add('horizon-transformed');
-          console.log(`Horizon UI: Трансформирована панель: ${selector}`);
+          if (selector.includes('CommandBar')) {
+            element.classList.add('horizon-transformed', 'horizon-toolbar');
+          } else {
+            element.classList.add('horizon-transformed', 'horizon-panel');
+          }
+          count++;
+          console.log(`Horizon UI: Трансформирована панель 1C: ${selector}`);
         }
       });
     });
+    
+    return count;
   }
 
-  transformMenus() {
+  transform1CMenus() {
     const selectors = [
       '.v8-menu',
       '.v8-dropdown',
       '.v8-context-menu'
     ];
     
+    let count = 0;
     selectors.forEach(selector => {
       const elements = document.querySelectorAll(selector);
       elements.forEach(element => {
         if (!element.classList.contains('horizon-transformed')) {
-          element.classList.add('horizon-transformed');
+          element.classList.add('horizon-transformed', 'horizon-menu');
           
           // Трансформируем элементы меню
           const items = element.querySelectorAll('.v8-menu-item, .v8-dropdown-item');
-          items.forEach(item => item.classList.add('horizon-transformed'));
+          items.forEach(item => {
+            item.classList.add('horizon-transformed', 'horizon-menu-item');
+          });
           
-          console.log(`Horizon UI: Трансформировано меню с ${items.length} элементами`);
+          count++;
+          console.log(`Horizon UI: Трансформировано меню 1C с ${items.length} элементами`);
         }
       });
     });
+    
+    return count;
   }
 
-  transformTabs() {
+  transform1CTabs() {
     const selectors = [
       '.v8-tab',
       '.v8-tab-button'
     ];
     
+    let count = 0;
     selectors.forEach(selector => {
       const elements = document.querySelectorAll(selector);
       elements.forEach(element => {
         if (!element.classList.contains('horizon-transformed')) {
-          element.classList.add('horizon-transformed');
-          console.log(`Horizon UI: Трансформирована вкладка: ${selector}`);
+          element.classList.add('horizon-transformed', 'horizon-tab');
+          count++;
+          console.log(`Horizon UI: Трансформирована вкладка 1C: ${selector}`);
         }
       });
     });
+    
+    return count;
   }
 
   setupMutationObserver() {
@@ -397,19 +368,22 @@ class HorizonUITransformer {
     }
     
     this.observer = new MutationObserver((mutations) => {
-      let hasNewElements = false;
+      let hasNew1CElements = false;
       
       mutations.forEach((mutation) => {
         if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
           mutation.addedNodes.forEach((node) => {
             if (node.nodeType === Node.ELEMENT_NODE) {
-              hasNewElements = true;
+              // Проверяем, есть ли новые элементы 1C
+              if (this.isElement1C(node)) {
+                hasNew1CElements = true;
+              }
             }
           });
         }
       });
       
-      if (hasNewElements) {
+      if (hasNew1CElements) {
         this.queueTransformation();
       }
     });
@@ -421,7 +395,21 @@ class HorizonUITransformer {
       characterData: false
     });
     
-    console.log('Horizon UI: MutationObserver настроен');
+    console.log('Horizon UI: MutationObserver настроен для элементов 1C');
+  }
+
+  isElement1C(element) {
+    // Проверяем, является ли элемент частью 1C
+    const className = element.className || '';
+    const id = element.id || '';
+    
+    return className.includes('v8') || 
+           id.includes('v8') || 
+           className.includes('SystemCommandBar') ||
+           element.querySelector && (
+             element.querySelector('[class*="v8"]') ||
+             element.querySelector('[id*="v8"]')
+           );
   }
 
   queueTransformation() {
@@ -435,11 +423,11 @@ class HorizonUITransformer {
   async processTransformationQueue() {
     this.isProcessingQueue = true;
     
-    // Ждем 100ms чтобы собрать все изменения
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Ждем 200ms чтобы собрать все изменения
+    await new Promise(resolve => setTimeout(resolve, 200));
     
     if (this.transformationQueue.length > 0) {
-      console.log('Horizon UI: Обработка очереди трансформации');
+      console.log('Horizon UI: Обработка очереди трансформации новых элементов 1C');
       this.transformNewElements();
       this.transformationQueue = [];
     }
@@ -448,126 +436,29 @@ class HorizonUITransformer {
   }
 
   transformNewElements() {
-    // Трансформируем новые элементы, которые появились динамически
-    const newButtons = document.querySelectorAll('button:not(.horizon-transformed), input[type="button"]:not(.horizon-transformed), .v8-button:not(.horizon-transformed)');
+    // Трансформируем только новые элементы 1C
+    const newButtons = document.querySelectorAll('button[class*="v8"]:not(.horizon-transformed), .v8-button:not(.horizon-transformed)');
     newButtons.forEach(button => {
-      button.classList.add('horizon-transformed');
+      button.classList.add('horizon-transformed', 'horizon-btn');
       const text = button.textContent || button.value || button.title || '';
       if (text.includes('Отмена') || text.includes('Закрыть') || text.includes('Cancel')) {
         button.classList.add('secondary');
       }
     });
     
-    const newInputs = document.querySelectorAll('input:not(.horizon-transformed), select:not(.horizon-transformed), textarea:not(.horizon-transformed), .v8-input:not(.horizon-transformed)');
+    const newInputs = document.querySelectorAll('input[class*="v8"]:not(.horizon-transformed), .v8-input:not(.horizon-transformed)');
     newInputs.forEach(input => {
-      input.classList.add('horizon-transformed');
+      input.classList.add('horizon-transformed', 'horizon-input');
     });
     
-    const newTables = document.querySelectorAll('table:not(.horizon-transformed), .v8-table:not(.horizon-transformed)');
+    const newTables = document.querySelectorAll('table[class*="v8"]:not(.horizon-transformed), .v8-table:not(.horizon-transformed)');
     newTables.forEach(table => {
-      table.classList.add('horizon-transformed');
-      const headers = table.querySelectorAll('th');
-      headers.forEach(header => header.classList.add('horizon-table-header'));
-      const cells = table.querySelectorAll('td');
-      cells.forEach(cell => cell.classList.add('horizon-table-cell'));
+      table.classList.add('horizon-transformed', 'horizon-table');
     });
     
     if (newButtons.length > 0 || newInputs.length > 0 || newTables.length > 0) {
-      console.log(`Horizon UI: Трансформированы новые элементы: ${newButtons.length} кнопок, ${newInputs.length} полей, ${newTables.length} таблиц`);
+      console.log(`Horizon UI: Трансформированы новые элементы 1C: ${newButtons.length} кнопок, ${newInputs.length} полей, ${newTables.length} таблиц`);
     }
-  }
-
-  addEnhancements() {
-    console.log('Horizon UI: Добавление улучшений');
-    
-    // Добавляем горячие клавиши
-    this.setupHotkeys();
-    
-    // Улучшаем фокус
-    this.enhanceFocus();
-    
-    // Добавляем индикаторы загрузки к формам
-    this.addLoadingIndicators();
-  }
-
-  setupHotkeys() {
-    document.addEventListener('keydown', (e) => {
-      // Esc для сброса фокуса
-      if (e.key === 'Escape') {
-        if (document.activeElement && document.activeElement.blur) {
-          document.activeElement.blur();
-        }
-      }
-    });
-  }
-
-  enhanceFocus() {
-    // Улучшаем видимость фокуса
-    document.addEventListener('focusin', (e) => {
-      e.target.classList.add('horizon-focused');
-    });
-    
-    document.addEventListener('focusout', (e) => {
-      e.target.classList.remove('horizon-focused');
-    });
-  }
-
-  addLoadingIndicators() {
-    // Добавляем индикаторы загрузки к формам
-    const forms = document.querySelectorAll('form, .v8-form');
-    forms.forEach(form => {
-      form.addEventListener('submit', () => {
-        this.showLoadingIndicator(form);
-      });
-    });
-  }
-
-  showLoadingIndicator(element) {
-    // Удаляем существующий индикатор
-    const existingLoader = element.querySelector('.horizon-loader');
-    if (existingLoader) {
-      existingLoader.remove();
-    }
-    
-    const loader = document.createElement('div');
-    loader.className = 'horizon-loader';
-    loader.innerHTML = '<div class="horizon-spinner"></div>';
-    
-    // Позиционируем относительно элемента
-    element.style.position = 'relative';
-    element.appendChild(loader);
-    
-    // Удаляем через 10 секунд если загрузка не завершилась
-    setTimeout(() => {
-      if (loader.parentNode) {
-        loader.remove();
-      }
-    }, 10000);
-  }
-
-  darkenColor(color, percent) {
-    // Простая функция для затемнения цвета
-    const num = parseInt(color.replace("#", ""), 16);
-    const amt = Math.round(2.55 * percent);
-    const R = (num >> 16) - amt;
-    const G = (num >> 8 & 0x00FF) - amt;
-    const B = (num & 0x0000FF) - amt;
-    return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
-      (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
-      (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
-  }
-
-  injectCustomCSS(css) {
-    // Удаляем существующий пользовательский CSS
-    const existingStyle = document.getElementById('horizon-custom-css');
-    if (existingStyle) {
-      existingStyle.remove();
-    }
-    
-    const style = document.createElement('style');
-    style.id = 'horizon-custom-css';
-    style.textContent = css;
-    document.head.appendChild(style);
   }
 
   setupMessageListener() {
@@ -589,10 +480,6 @@ class HorizonUITransformer {
             if (this.settings.autoDetect && !this.isTransformed) {
               this.transformPage();
             }
-            sendResponse({ success: true });
-            break;
-          case 'showPerformanceNotification':
-            this.showNotification(request.message, 'warning');
             sendResponse({ success: true });
             break;
           default:
@@ -625,19 +512,25 @@ class HorizonUITransformer {
   removeTransformation() {
     console.log('Horizon UI: Удаление трансформации');
     
-    document.documentElement.classList.remove('horizon-ui', 'horizon-compact', 'horizon-no-animations', 'horizon-high-contrast');
-    document.body.classList.remove('horizon-ui');
+    // Удаляем только наши классы
+    document.documentElement.classList.remove('horizon-compact', 'horizon-no-animations', 'horizon-high-contrast');
     
-    // Удаляем добавленные классы
+    // Удаляем классы только с наших элементов
     document.querySelectorAll('.horizon-transformed').forEach(el => {
-      el.classList.remove('horizon-transformed', 'secondary', 'horizon-table-header', 'horizon-table-cell');
+      el.classList.remove(
+        'horizon-transformed', 
+        'horizon-btn', 
+        'horizon-input', 
+        'horizon-table', 
+        'horizon-form', 
+        'horizon-panel', 
+        'horizon-toolbar', 
+        'horizon-menu', 
+        'horizon-menu-item', 
+        'horizon-tab',
+        'secondary'
+      );
     });
-    
-    // Удаляем пользовательский CSS
-    const customStyle = document.getElementById('horizon-custom-css');
-    if (customStyle) {
-      customStyle.remove();
-    }
     
     // Отключаем observer
     if (this.observer) {
@@ -692,116 +585,15 @@ class HorizonUITransformer {
     }
   }
 
-  showNotification(message, type = 'info') {
-    try {
-      // Удаляем существующие уведомления
-      document.querySelectorAll('.horizon-notification').forEach(notification => notification.remove());
-      
-      const notification = document.createElement('div');
-      notification.className = `horizon-notification horizon-notification-${type}`;
-      
-      const icons = {
-        success: '✅',
-        error: '❌',
-        warning: '⚠️',
-        info: 'ℹ️'
-      };
-      
-      notification.innerHTML = `
-        <span class="horizon-notification-icon">${icons[type] || icons.info}</span>
-        <span class="horizon-notification-message">${message}</span>
-        <button class="horizon-notification-close">×</button>
-      `;
-      
-      // Добавляем стили для уведомления
-      const style = document.createElement('style');
-      style.textContent = `
-        .horizon-notification {
-          position: fixed !important;
-          top: 20px !important;
-          right: 20px !important;
-          padding: 12px 16px !important;
-          border-radius: 8px !important;
-          color: white !important;
-          font-size: 14px !important;
-          font-weight: 500 !important;
-          z-index: 10000 !important;
-          max-width: 300px !important;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
-          transform: translateX(100%) !important;
-          transition: transform 0.3s ease !important;
-          display: flex !important;
-          align-items: center !important;
-          gap: 8px !important;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-        }
-        .horizon-notification.show {
-          transform: translateX(0) !important;
-        }
-        .horizon-notification-success {
-          background: #48BB78 !important;
-        }
-        .horizon-notification-error {
-          background: #F56565 !important;
-        }
-        .horizon-notification-warning {
-          background: #ED8936 !important;
-        }
-        .horizon-notification-info {
-          background: #4299E1 !important;
-        }
-        .horizon-notification-close {
-          background: none !important;
-          border: none !important;
-          color: white !important;
-          cursor: pointer !important;
-          font-size: 16px !important;
-          margin-left: auto !important;
-          padding: 0 !important;
-          opacity: 0.8 !important;
-        }
-        .horizon-notification-close:hover {
-          opacity: 1 !important;
-        }
-      `;
-      
-      document.head.appendChild(style);
-      document.body.appendChild(notification);
-      
-      // Показываем уведомление
-      setTimeout(() => notification.classList.add('show'), 100);
-      
-      // Автоматическое скрытие
-      setTimeout(() => {
-        notification.classList.remove('show');
-        setTimeout(() => {
-          if (notification.parentNode) {
-            notification.remove();
-          }
-          if (style.parentNode) {
-            style.remove();
-          }
-        }, 300);
-      }, 5000);
-      
-      // Закрытие по клику
-      const closeBtn = notification.querySelector('.horizon-notification-close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', () => {
-          notification.classList.remove('show');
-          setTimeout(() => {
-            if (notification.parentNode) {
-              notification.remove();
-            }
-            if (style.parentNode) {
-              style.remove();
-            }
-          }, 300);
-        });
-      }
-    } catch (error) {
-      console.error('Horizon UI: Ошибка показа уведомления:', error);
-    }
+  darkenColor(color, percent) {
+    const num = parseInt(color.replace("#", ""), 16);
+    const amt = Math.round(2.55 * percent);
+    const R = (num >> 16) - amt;
+    const G = (num >> 8 & 0x00FF) - amt;
+    const B = (num & 0x0000FF) - amt;
+    return "#" + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+      (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+      (B < 255 ? B < 1 ? 0 : B : 255)).toString(16).slice(1);
   }
 
   mergeDeep(target, source) {
@@ -826,15 +618,15 @@ class HorizonUITransformer {
   }
 }
 
-// Инициализируем трансформер
-console.log('Horizon UI: Загрузка content script');
+// Инициализируем трансформер только для страниц 1C
+console.log('Horizon UI: Загрузка content script для деликатной трансформации');
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    console.log('Horizon UI: DOM загружен, инициализация трансформера');
+    console.log('Horizon UI: DOM загружен, проверка необходимости трансформации');
     new HorizonUITransformer();
   });
 } else {
-  console.log('Horizon UI: DOM уже загружен, инициализация трансформера');
+  console.log('Horizon UI: DOM уже загружен, проверка необходимости трансформации');
   new HorizonUITransformer();
 }

@@ -1,4 +1,4 @@
-/* content/horizon-styles.css */
+/* content/horizon-styles.css - Деликатные стили только для элементов 1C */
 
 /* Базовые CSS переменные Horizon UI */
 :root {
@@ -34,94 +34,42 @@
 
   /* Typography */
   --horizon-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --horizon-font-size-xs: 0.75rem;
-  --horizon-font-size-sm: 0.875rem;
-  --horizon-font-size-md: 1rem;
-  --horizon-font-size-lg: 1.125rem;
-  --horizon-font-size-xl: 1.25rem;
-  --horizon-font-size-2xl: 1.5rem;
-  --horizon-font-size-3xl: 1.875rem;
 
   /* Spacing */
-  --horizon-space-1: 0.25rem;
   --horizon-space-2: 0.5rem;
   --horizon-space-3: 0.75rem;
   --horizon-space-4: 1rem;
-  --horizon-space-5: 1.25rem;
   --horizon-space-6: 1.5rem;
-  --horizon-space-8: 2rem;
-  --horizon-space-10: 2.5rem;
-  --horizon-space-12: 3rem;
 
   /* Border Radius */
-  --horizon-radius-sm: 0.25rem;
   --horizon-radius-md: 0.375rem;
   --horizon-radius-lg: 0.5rem;
   --horizon-radius-xl: 0.75rem;
-  --horizon-radius-2xl: 1rem;
 
   /* Shadows */
   --horizon-shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   --horizon-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --horizon-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --horizon-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 }
 
-/* Загрузка шрифта Inter */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+/* Загрузка шрифта Inter только для трансформированных элементов */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-/* Глобальные стили для трансформированного интерфейса */
-html.horizon-ui,
-body.horizon-ui {
-  font-family: var(--horizon-font-family) !important;
-  font-size: var(--horizon-font-size-md) !important;
-  line-height: 1.5 !important;
-  color: var(--horizon-gray-800) !important;
-  background: var(--horizon-gray-50) !important;
-}
+/* ТОЛЬКО для специфичных элементов 1C - НЕ затрагиваем общий дизайн сайта */
 
-/* Основные элементы 1C */
-.horizon-ui .v8-main-frame,
-.horizon-ui .v8-main-container,
-.horizon-ui .v8-dynamic-form,
-.horizon-ui .v8-dynamic-list,
-.horizon-ui .v8-form-container {
-  background: var(--horizon-gray-50) !important;
-  font-family: var(--horizon-font-family) !important;
-}
-
-/* Командная панель 1C */
-.horizon-ui .SystemCommandBar,
-.horizon-ui #SystemCommandBar,
-.horizon-ui .v8-command-bar,
-.horizon-ui .v8-toolbar {
-  background: white !important;
-  border: none !important;
-  border-bottom: 1px solid var(--horizon-gray-200) !important;
-  box-shadow: var(--horizon-shadow-sm) !important;
-  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
-  border-radius: 0 !important;
-}
-
-/* Кнопки 1C */
-.horizon-ui button,
-.horizon-ui input[type="button"],
-.horizon-ui input[type="submit"],
-.horizon-ui .v8-button,
-.horizon-ui .v8-command-button,
-.horizon-ui .SystemCommandBar button,
-.horizon-ui #SystemCommandBar button {
+/* Кнопки 1C - только с классом horizon-btn */
+.horizon-btn {
   background: var(--horizon-brand-500) !important;
   color: white !important;
   border: none !important;
   border-radius: var(--horizon-radius-lg) !important;
   padding: var(--horizon-space-3) var(--horizon-space-6) !important;
-  font-size: var(--horizon-font-size-sm) !important;
+  font-size: 14px !important;
   font-weight: 500 !important;
   font-family: var(--horizon-font-family) !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
-  min-height: 2.5rem !important;
+  min-height: 40px !important;
   display: inline-flex !important;
   align-items: center !important;
   justify-content: center !important;
@@ -129,157 +77,129 @@ body.horizon-ui {
   box-shadow: var(--horizon-shadow-sm) !important;
 }
 
-.horizon-ui button:hover,
-.horizon-ui input[type="button"]:hover,
-.horizon-ui input[type="submit"]:hover,
-.horizon-ui .v8-button:hover,
-.horizon-ui .v8-command-button:hover {
+.horizon-btn:hover {
   background: var(--horizon-brand-600) !important;
   transform: translateY(-1px) !important;
   box-shadow: var(--horizon-shadow-md) !important;
 }
 
-/* Вторичные кнопки */
-.horizon-ui button.secondary,
-.horizon-ui .v8-button.secondary,
-.horizon-ui button[title*="Отмена"],
-.horizon-ui button[title*="Закрыть"] {
+.horizon-btn.secondary {
   background: var(--horizon-gray-100) !important;
   color: var(--horizon-gray-700) !important;
 }
 
-.horizon-ui button.secondary:hover,
-.horizon-ui .v8-button.secondary:hover,
-.horizon-ui button[title*="Отмена"]:hover,
-.horizon-ui button[title*="Закрыть"]:hover {
+.horizon-btn.secondary:hover {
   background: var(--horizon-gray-200) !important;
 }
 
-/* Поля ввода 1C */
-.horizon-ui input[type="text"],
-.horizon-ui input[type="password"],
-.horizon-ui input[type="email"],
-.horizon-ui input[type="number"],
-.horizon-ui input[type="date"],
-.horizon-ui input[type="time"],
-.horizon-ui textarea,
-.horizon-ui select,
-.horizon-ui .v8-input,
-.horizon-ui .v8-text-input,
-.horizon-ui .v8-number-input,
-.horizon-ui .v8-date-input {
+/* Поля ввода 1C - только с классом horizon-input */
+.horizon-input {
   background: white !important;
   border: 1px solid var(--horizon-gray-200) !important;
   border-radius: var(--horizon-radius-lg) !important;
   padding: var(--horizon-space-3) var(--horizon-space-4) !important;
-  font-size: var(--horizon-font-size-sm) !important;
+  font-size: 14px !important;
   font-family: var(--horizon-font-family) !important;
   color: var(--horizon-gray-800) !important;
   transition: all 0.2s ease !important;
-  min-height: 2.5rem !important;
+  min-height: 40px !important;
   box-shadow: var(--horizon-shadow-sm) !important;
 }
 
-.horizon-ui input[type="text"]:focus,
-.horizon-ui input[type="password"]:focus,
-.horizon-ui input[type="email"]:focus,
-.horizon-ui input[type="number"]:focus,
-.horizon-ui input[type="date"]:focus,
-.horizon-ui input[type="time"]:focus,
-.horizon-ui textarea:focus,
-.horizon-ui select:focus,
-.horizon-ui .v8-input:focus,
-.horizon-ui .v8-text-input:focus,
-.horizon-ui .v8-number-input:focus,
-.horizon-ui .v8-date-input:focus {
+.horizon-input:focus {
   outline: none !important;
   border-color: var(--horizon-brand-500) !important;
   box-shadow: 0 0 0 3px rgba(67, 24, 255, 0.1) !important;
 }
 
-/* Таблицы 1C */
-.horizon-ui table,
-.horizon-ui .v8-dynamic-list-table,
-.horizon-ui .v8-table,
-.horizon-ui .v8-grid {
+/* Таблицы 1C - только с классом horizon-table */
+.horizon-table {
   background: white !important;
   border-radius: var(--horizon-radius-xl) !important;
   box-shadow: var(--horizon-shadow-md) !important;
   overflow: hidden !important;
   border-collapse: separate !important;
   border-spacing: 0 !important;
-  width: 100% !important;
-  margin-bottom: var(--horizon-space-6) !important;
 }
 
-.horizon-ui table th,
-.horizon-ui .v8-dynamic-list-table th,
-.horizon-ui .v8-table th,
-.horizon-ui .v8-grid th,
-.horizon-ui .v8-table-header {
+.horizon-table th {
   background: var(--horizon-gray-50) !important;
   padding: var(--horizon-space-4) !important;
   text-align: left !important;
   font-weight: 600 !important;
-  font-size: var(--horizon-font-size-sm) !important;
+  font-size: 14px !important;
   color: var(--horizon-gray-700) !important;
   border-bottom: 1px solid var(--horizon-gray-200) !important;
   font-family: var(--horizon-font-family) !important;
 }
 
-.horizon-ui table td,
-.horizon-ui .v8-dynamic-list-table td,
-.horizon-ui .v8-table td,
-.horizon-ui .v8-grid td,
-.horizon-ui .v8-table-cell {
+.horizon-table td {
   padding: var(--horizon-space-4) !important;
   border-bottom: 1px solid var(--horizon-gray-100) !important;
-  font-size: var(--horizon-font-size-sm) !important;
+  font-size: 14px !important;
   color: var(--horizon-gray-800) !important;
   font-family: var(--horizon-font-family) !important;
 }
 
-.horizon-ui table tbody tr:hover,
-.horizon-ui .v8-dynamic-list-table tbody tr:hover,
-.horizon-ui .v8-table tbody tr:hover,
-.horizon-ui .v8-grid tbody tr:hover {
+.horizon-table tbody tr:hover {
   background: var(--horizon-gray-50) !important;
 }
 
-.horizon-ui table tbody tr:last-child td,
-.horizon-ui .v8-dynamic-list-table tbody tr:last-child td,
-.horizon-ui .v8-table tbody tr:last-child td,
-.horizon-ui .v8-grid tbody tr:last-child td {
+.horizon-table tbody tr:last-child td {
   border-bottom: none !important;
 }
 
-/* Формы 1C */
-.horizon-ui .v8-dynamic-form,
-.horizon-ui .v8-form,
-.horizon-ui .v8-form-container,
-.horizon-ui form {
+/* Формы 1C - только с классом horizon-form */
+.horizon-form {
   background: white !important;
   border-radius: var(--horizon-radius-xl) !important;
   box-shadow: var(--horizon-shadow-md) !important;
   padding: var(--horizon-space-6) !important;
-  margin-bottom: var(--horizon-space-6) !important;
+  border: 1px solid var(--horizon-gray-200) !important;
 }
 
-/* Панели и контейнеры */
-.horizon-ui .v8-panel,
-.horizon-ui .v8-container,
-.horizon-ui .v8-group-box,
-.horizon-ui .v8-tab-panel {
+/* Панели 1C - только с классом horizon-panel */
+.horizon-panel {
   background: white !important;
   border: 1px solid var(--horizon-gray-200) !important;
   border-radius: var(--horizon-radius-lg) !important;
   box-shadow: var(--horizon-shadow-sm) !important;
-  margin-bottom: var(--horizon-space-4) !important;
 }
 
-/* Вкладки 1C */
-.horizon-ui .v8-tab,
-.horizon-ui .v8-tab-button {
+/* Командная панель 1C - только с классом horizon-toolbar */
+.horizon-toolbar {
+  background: white !important;
+  border: none !important;
+  border-bottom: 1px solid var(--horizon-gray-200) !important;
+  box-shadow: var(--horizon-shadow-sm) !important;
+  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
+}
+
+/* Меню 1C - только с классом horizon-menu */
+.horizon-menu {
+  background: white !important;
+  border: 1px solid var(--horizon-gray-200) !important;
+  border-radius: var(--horizon-radius-lg) !important;
+  box-shadow: var(--horizon-shadow-lg) !important;
+  padding: var(--horizon-space-2) 0 !important;
+}
+
+.horizon-menu-item {
+  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
+  font-family: var(--horizon-font-family) !important;
+  font-size: 14px !important;
+  color: var(--horizon-gray-700) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.horizon-menu-item:hover {
+  background: var(--horizon-gray-50) !important;
+  color: var(--horizon-brand-600) !important;
+}
+
+/* Вкладки 1C - только с классом horizon-tab */
+.horizon-tab {
   background: var(--horizon-gray-100) !important;
   border: 1px solid var(--horizon-gray-200) !important;
   border-radius: var(--horizon-radius-lg) var(--horizon-radius-lg) 0 0 !important;
@@ -291,285 +211,144 @@ body.horizon-ui {
   transition: all 0.2s ease !important;
 }
 
-.horizon-ui .v8-tab.active,
-.horizon-ui .v8-tab-button.active,
-.horizon-ui .v8-tab:hover,
-.horizon-ui .v8-tab-button:hover {
+.horizon-tab.active,
+.horizon-tab:hover {
   background: white !important;
   color: var(--horizon-brand-600) !important;
   border-bottom-color: white !important;
 }
 
-/* Меню и выпадающие списки */
-.horizon-ui .v8-menu,
-.horizon-ui .v8-dropdown,
-.horizon-ui .v8-context-menu {
-  background: white !important;
-  border: 1px solid var(--horizon-gray-200) !important;
-  border-radius: var(--horizon-radius-lg) !important;
-  box-shadow: var(--horizon-shadow-lg) !important;
-  padding: var(--horizon-space-2) 0 !important;
-}
-
-.horizon-ui .v8-menu-item,
-.horizon-ui .v8-dropdown-item {
-  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
-  font-family: var(--horizon-font-family) !important;
-  font-size: var(--horizon-font-size-sm) !important;
-  color: var(--horizon-gray-700) !important;
-  cursor: pointer !important;
-  transition: all 0.2s ease !important;
-}
-
-.horizon-ui .v8-menu-item:hover,
-.horizon-ui .v8-dropdown-item:hover {
-  background: var(--horizon-gray-50) !important;
-  color: var(--horizon-brand-600) !important;
-}
-
-/* Чекбоксы и радиокнопки */
-.horizon-ui input[type="checkbox"],
-.horizon-ui input[type="radio"],
-.horizon-ui .v8-checkbox,
-.horizon-ui .v8-radio {
-  width: 1.25rem !important;
-  height: 1.25rem !important;
+/* Чекбоксы и радиокнопки - только с классом horizon-checkbox */
+.horizon-checkbox,
+.horizon-radio {
+  width: 20px !important;
+  height: 20px !important;
   border: 2px solid var(--horizon-gray-300) !important;
-  border-radius: var(--horizon-radius-sm) !important;
+  border-radius: var(--horizon-radius-md) !important;
   background: white !important;
   cursor: pointer !important;
   transition: all 0.2s ease !important;
 }
 
-.horizon-ui input[type="radio"],
-.horizon-ui .v8-radio {
+.horizon-radio {
   border-radius: 50% !important;
 }
 
-.horizon-ui input[type="checkbox"]:checked,
-.horizon-ui input[type="radio"]:checked,
-.horizon-ui .v8-checkbox:checked,
-.horizon-ui .v8-radio:checked {
+.horizon-checkbox:checked,
+.horizon-radio:checked {
   background: var(--horizon-brand-500) !important;
   border-color: var(--horizon-brand-500) !important;
 }
 
-/* Прогресс-бары и индикаторы */
-.horizon-ui .v8-progress,
-.horizon-ui .v8-progress-bar {
-  background: var(--horizon-gray-200) !important;
-  border-radius: var(--horizon-radius-lg) !important;
-  height: 0.5rem !important;
-  overflow: hidden !important;
-}
-
-.horizon-ui .v8-progress-fill {
-  background: var(--horizon-brand-500) !important;
-  height: 100% !important;
-  border-radius: var(--horizon-radius-lg) !important;
-  transition: width 0.3s ease !important;
-}
-
-/* Статусные сообщения */
-.horizon-ui .v8-message,
-.horizon-ui .v8-notification {
+/* Статусные сообщения - только с классом horizon-message */
+.horizon-message {
   padding: var(--horizon-space-4) !important;
   border-radius: var(--horizon-radius-lg) !important;
   font-family: var(--horizon-font-family) !important;
-  font-size: var(--horizon-font-size-sm) !important;
+  font-size: 14px !important;
   margin-bottom: var(--horizon-space-4) !important;
 }
 
-.horizon-ui .v8-message.success,
-.horizon-ui .v8-notification.success {
+.horizon-message.success {
   background: rgba(72, 187, 120, 0.1) !important;
   color: var(--horizon-success) !important;
   border: 1px solid rgba(72, 187, 120, 0.2) !important;
 }
 
-.horizon-ui .v8-message.error,
-.horizon-ui .v8-notification.error {
+.horizon-message.error {
   background: rgba(245, 101, 101, 0.1) !important;
   color: var(--horizon-error) !important;
   border: 1px solid rgba(245, 101, 101, 0.2) !important;
 }
 
-.horizon-ui .v8-message.warning,
-.horizon-ui .v8-notification.warning {
+.horizon-message.warning {
   background: rgba(237, 137, 54, 0.1) !important;
   color: var(--horizon-warning) !important;
   border: 1px solid rgba(237, 137, 54, 0.2) !important;
 }
 
-/* Анимации */
-@keyframes fadeIn {
+/* Модальные окна - только с классом horizon-modal */
+.horizon-modal {
+  background: white !important;
+  border-radius: var(--horizon-radius-xl) !important;
+  box-shadow: var(--horizon-shadow-lg) !important;
+  border: none !important;
+}
+
+.horizon-modal-overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Анимации - только для трансформированных элементов */
+@keyframes horizonFadeIn {
   from { opacity: 0; transform: translateY(10px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes slideIn {
-  from { transform: translateX(-100%); }
-  to { transform: translateX(0); }
+.horizon-fade-in {
+  animation: horizonFadeIn 0.3s ease-out !important;
 }
 
-.horizon-ui .horizon-fade-in {
-  animation: fadeIn 0.3s ease-out !important;
-}
-
-.horizon-ui .horizon-slide-in {
-  animation: slideIn 0.3s ease-out !important;
-}
-
-/* Отключение анимаций */
-.horizon-ui.horizon-no-animations *,
-.horizon-ui.horizon-no-animations *::before,
-.horizon-ui.horizon-no-animations *::after {
-  animation-duration: 0.01ms !important;
-  animation-iteration-count: 1 !important;
-  transition-duration: 0.01ms !important;
+/* Отключение анимаций при необходимости */
+.horizon-no-animations .horizon-btn,
+.horizon-no-animations .horizon-input,
+.horizon-no-animations .horizon-tab,
+.horizon-no-animations .horizon-menu-item {
+  transition: none !important;
 }
 
 /* Компактный режим */
-.horizon-ui.horizon-compact {
-  --horizon-space-1: 0.125rem;
-  --horizon-space-2: 0.25rem;
-  --horizon-space-3: 0.375rem;
-  --horizon-space-4: 0.5rem;
-  --horizon-space-5: 0.625rem;
-  --horizon-space-6: 0.75rem;
-  --horizon-space-8: 1rem;
+.horizon-compact .horizon-btn {
+  padding: 6px 12px !important;
+  min-height: 32px !important;
+}
+
+.horizon-compact .horizon-input {
+  padding: 6px 12px !important;
+  min-height: 32px !important;
+}
+
+.horizon-compact .horizon-table th,
+.horizon-compact .horizon-table td {
+  padding: 8px !important;
 }
 
 /* Высокий контраст */
-.horizon-ui.horizon-high-contrast {
-  --horizon-gray-800: #000000;
-  --horizon-gray-700: #1a1a1a;
-  --horizon-gray-600: #333333;
-  --horizon-brand-500: #0000FF;
-  --horizon-brand-600: #0000CC;
+.horizon-high-contrast .horizon-btn {
+  border: 2px solid var(--horizon-brand-700) !important;
+}
+
+.horizon-high-contrast .horizon-input {
+  border: 2px solid var(--horizon-gray-600) !important;
 }
 
 /* Темная тема */
-.horizon-ui[data-theme="dark"] {
-  --horizon-gray-50: #171923;
-  --horizon-gray-100: #1A202C;
-  --horizon-gray-200: #2D3748;
-  --horizon-gray-300: #4A5568;
-  --horizon-gray-400: #718096;
-  --horizon-gray-500: #A0AEC0;
-  --horizon-gray-600: #CBD5E0;
-  --horizon-gray-700: #E2E8F0;
-  --horizon-gray-800: #F7FAFC;
-  --horizon-gray-900: #FFFFFF;
+[data-theme="dark"] .horizon-btn {
+  background: var(--horizon-brand-400) !important;
 }
 
-/* Адаптивность */
-@media (max-width: 768px) {
-  .horizon-ui .v8-main-frame,
-  .horizon-ui .v8-dynamic-form,
-  .horizon-ui .v8-table {
-    margin: var(--horizon-space-2) !important;
-    padding: var(--horizon-space-4) !important;
-  }
-  
-  .horizon-ui button,
-  .horizon-ui .v8-button {
-    min-height: 2.75rem !important;
-    font-size: var(--horizon-font-size-md) !important;
-  }
+[data-theme="dark"] .horizon-input {
+  background: var(--horizon-gray-800) !important;
+  color: var(--horizon-gray-100) !important;
+  border-color: var(--horizon-gray-600) !important;
 }
 
-/* Поиск и подсветка */
-.horizon-ui .horizon-search-highlight {
-  background: rgba(255, 235, 59, 0.3) !important;
-  border-radius: var(--horizon-radius-sm) !important;
-  padding: 0.125rem !important;
+[data-theme="dark"] .horizon-table {
+  background: var(--horizon-gray-800) !important;
 }
 
-/* Индикаторы загрузки */
-.horizon-ui .horizon-loader {
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  z-index: 1000 !important;
+[data-theme="dark"] .horizon-table th {
+  background: var(--horizon-gray-700) !important;
+  color: var(--horizon-gray-100) !important;
 }
 
-.horizon-ui .horizon-spinner {
-  width: 2rem !important;
-  height: 2rem !important;
-  border: 2px solid var(--horizon-gray-200) !important;
-  border-top: 2px solid var(--horizon-brand-500) !important;
-  border-radius: 50% !important;
-  animation: spin 1s linear infinite !important;
+[data-theme="dark"] .horizon-table td {
+  color: var(--horizon-gray-200) !important;
+  border-color: var(--horizon-gray-600) !important;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Фокус */
-.horizon-ui .horizon-focused {
+/* Фокус для доступности */
+.horizon-focused {
   outline: 2px solid var(--horizon-brand-500) !important;
   outline-offset: 2px !important;
-}
-
-/* Скроллбары */
-.horizon-ui ::-webkit-scrollbar {
-  width: 8px !important;
-  height: 8px !important;
-}
-
-.horizon-ui ::-webkit-scrollbar-track {
-  background: var(--horizon-gray-100) !important;
-  border-radius: var(--horizon-radius-lg) !important;
-}
-
-.horizon-ui ::-webkit-scrollbar-thumb {
-  background: var(--horizon-gray-400) !important;
-  border-radius: var(--horizon-radius-lg) !important;
-}
-
-.horizon-ui ::-webkit-scrollbar-thumb:hover {
-  background: var(--horizon-gray-500) !important;
-}
-
-/* Специфичные селекторы для разных версий 1C */
-.horizon-ui .v8ui-ctl,
-.horizon-ui .v8ui-ctl-edit,
-.horizon-ui .v8ui-ctl-button {
-  font-family: var(--horizon-font-family) !important;
-}
-
-.horizon-ui .v8ui-ctl-edit {
-  background: white !important;
-  border: 1px solid var(--horizon-gray-200) !important;
-  border-radius: var(--horizon-radius-lg) !important;
-  padding: var(--horizon-space-3) var(--horizon-space-4) !important;
-}
-
-.horizon-ui .v8ui-ctl-button {
-  background: var(--horizon-brand-500) !important;
-  color: white !important;
-  border: none !important;
-  border-radius: var(--horizon-radius-lg) !important;
-  padding: var(--horizon-space-3) var(--horizon-space-6) !important;
-}
-
-/* Исправление z-index для модальных окон */
-.horizon-ui .v8-modal,
-.horizon-ui .v8-dialog,
-.horizon-ui .v8-popup {
-  z-index: 10000 !important;
-  background: white !important;
-  border-radius: var(--horizon-radius-xl) !important;
-  box-shadow: var(--horizon-shadow-xl) !important;
-  border: none !important;
-}
-
-.horizon-ui .v8-modal-overlay,
-.horizon-ui .v8-dialog-overlay {
-  background: rgba(0, 0, 0, 0.5) !important;
-  z-index: 9999 !important;
 }
