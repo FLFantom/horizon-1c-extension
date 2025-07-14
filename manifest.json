@@ -1,0 +1,80 @@
+{
+  "manifest_version": 3,
+  "name": "Horizon UI for 1C:Enterprise",
+  "version": "2.0.0",
+  "description": "Трансформирует интерфейс 1C под современный дизайн Horizon UI с улучшенной производительностью и функциональностью",
+  
+  "permissions": [
+    "activeTab",
+    "storage",
+    "scripting",
+    "tabs",
+    "contextMenus"
+  ],
+  
+  "host_permissions": [
+    "*://*/*/hs/v8reader/*",
+    "*://localhost:*/*/hs/v8reader/*",
+    "*://clobus.uz/*",
+    "*://*.1cfresh.com/*",
+    "*://*/*/ws/*",
+    "*://*/*/ru_RU/*",
+    "*://*/*/en_US/*"
+  ],
+  
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*/*/hs/v8reader/*",
+        "*://localhost:*/*/hs/v8reader/*", 
+        "*://clobus.uz/*",
+        "*://*.1cfresh.com/*",
+        "*://*/*/ws/*",
+        "*://*/*/ru_RU/*",
+        "*://*/*/en_US/*"
+      ],
+      "js": [
+        "horizon-1c-extension/content/horizon-performance.js",
+        "horizon-1c-extension/content/horizon-accessibility.js",
+        "horizon-1c-extension/content/horizon-components.js",
+        "horizon-1c-extension/content/content.js"
+      ],
+      "css": [
+        "horizon-1c-extension/content/horizon-styles.css"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  
+  "background": {
+    "service_worker": "horizon-1c-extension/background/background.js"
+  },
+  
+  "action": {
+    "default_popup": "horizon-1c-extension/popup/popup.html",
+    "default_title": "Horizon UI Settings",
+    "default_icon": {
+      "16": "assets/icon-16.png",
+      "48": "assets/icon-48.png",
+      "128": "assets/icon-128.png"
+    }
+  },
+  
+  "icons": {
+    "16": "assets/icon-16.png",
+    "48": "assets/icon-48.png",
+    "128": "assets/icon-128.png"
+  },
+  
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "horizon-1c-extension/content/horizon-styles.css",
+        "assets/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  
+  "options_page": "horizon-1c-extension/options/options.html"
+}
